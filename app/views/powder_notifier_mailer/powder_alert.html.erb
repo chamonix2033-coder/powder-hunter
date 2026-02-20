@@ -1,15 +1,19 @@
 <h2><%= @user.email %> 様</h2>
 
 <p>Powder Hunterからの最新のパウダー情報です！</p>
-<p>昨日までパウダー予報がなかったスキー場で、新たにパウダーチャンスが到来しました。</p>
+<p>昨日までパウダー予報がなかったお気に入りスキー場で、新たにパウダーチャンスが到来しました。</p>
 
-<ul>
-  <li><strong>スキー場:</strong> <%= @resort.name_ja.presence || @resort.name_en %></li>
-  <li><strong>パウダー到来日:</strong> <%= @powder_date %></li>
-  <li><strong>パウダー指数:</strong> <%= @index_val %> / 100</li>
-</ul>
-
-<p>詳細は <%= link_to 'Powder Hunter', "http://localhost:3000/resorts/#{@resort.id}" %> をご確認ください！</p>
+<% @matching_resorts_data.each do |data| %>
+  <% resort = data[:resort] %>
+  <% resort_name = resort.name_ja.presence || resort.name_en %>
+  
+  <h3>🏂 <%= resort_name %></h3>
+  <ul>
+    <li><strong>パウダー到来日:</strong> <%= data[:date] %></li>
+    <li><strong>パウダー指数:</strong> <%= data[:index] %> / 100</li>
+  </ul>
+  <p>詳細は <%= link_to 'スキー場情報', "http://localhost:3000/resorts/#{resort.id}" %> をご確認ください！</p>
+<% end %>
 
 <hr>
 <p><small>Powder Hunter 運営</small></p>

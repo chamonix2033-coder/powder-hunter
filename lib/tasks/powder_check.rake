@@ -3,6 +3,8 @@ namespace :powder do
   task check: :environment do
     puts "Starting daily powder check at #{Time.current}..."
 
+    improved_resorts_data = []
+
     SkiResort.all.each do |resort|
       service = OpenMeteoService.new(resort)
       forecast = service.fetch_forecast
@@ -25,7 +27,6 @@ namespace :powder do
       today_powder_index = today_index_val > 0 ? [(today_index_val * 2).round, 100].min : 0
 
       # Check for next powder day in the 14-day window
-      # This mimics the controller's logic - find the FIRST day >= 1
       time_array.each_with_index do |date_str, idx|
         d_snow = snowfall_array[idx] || 0
         d_max = max_temp_array[idx] || 0
@@ -48,20 +49,37 @@ namespace :powder do
       puts "Resort: #{resort_display_name} | Current Index: #{current_powder_index} | Last Index: #{resort.last_powder_index}"
 
       # Condition to notify: Today index is > 0 AND Yesterday index was <= 0
-      # OR: There's an active valid notification window
       last_val = resort.last_powder_index || 0
       if current_powder_index > 0 && last_val <= 0
-        puts " -> Positive powder change detected! Sending emails."
-        User.find_each do |user|
-          PowderNotifierMailer.powder_alert(user, resort, next_powder_day[:date], current_powder_index).deliver_now
-        end
-      else
-        puts " -> No email condition met."
+        improved_resorts_data << {
+          resort: resort,
+          date: next_powder_day[:date],
+          index: current_powder_index
+        }
       end
 
       # ALWAYS persist today's evaluation into the DB for tomorrow's verification
       # Also cache today's powder index for fast map loading
       resort.update!(last_powder_index: current_powder_index, cached_powder_index: today_powder_index)
+    end
+    
+    # Process Grouped Emails
+    if improved_resorts_data.any?
+      puts "Processing email deliveries for users..."
+      User.find_each do |user|
+        # Only email users about resorts they have specifically selected
+        user_resort_ids = user.ski_resorts.pluck(:id)
+        matching_data = improved_resorts_data.select do |data|
+          user_resort_ids.include?(data[:resort].id)
+        end
+
+        if matching_data.any?
+          puts " -> Sending alert to #{user.email} for #{matching_data.size} matched resorts."
+          PowderNotifierMailer.powder_alert(user, matching_data).deliver_now
+        end
+      end
+    else
+      puts "No powder condition changes to notify about today."
     end
     
     puts "Finished powder check."

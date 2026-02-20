@@ -1,21 +1,21 @@
 class PowderNotifierMailer < ApplicationMailer
   default from: ENV['GMAIL_USERNAME'] || 'no-reply@powderhunter.com'
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.powder_notifier_mailer.powder_alert.subject
-  #
-  def powder_alert(user, resort, powder_date, index_val)
+  # matching_resorts_data will be an array of hashes: [{ resort: r, date: d, index: i }]
+  def powder_alert(user, matching_resorts_data)
     @user = user
-    @resort = resort
-    @powder_date = powder_date
-    @index_val = index_val
+    @matching_resorts_data = matching_resorts_data
 
-    resort_name = @resort.name_ja.presence || @resort.name_en
+    subject_text = if @matching_resorts_data.size == 1
+                     resort_name = @matching_resorts_data.first[:resort].name_ja.presence || @matching_resorts_data.first[:resort].name_en
+                     "【Powder Hunter】#{resort_name}にパウダーチャンス到来！"
+                   else
+                     "【Powder Hunter】登録した#{@matching_resorts_data.size}箇所のスキー場にパウダーチャンス到来！"
+                   end
+
     mail(
       to: @user.email,
-      subject: "【Powder Hunter】#{resort_name}にパウダーチャンス到来！（#{@powder_date}）"
+      subject: subject_text
     )
   end
 end
