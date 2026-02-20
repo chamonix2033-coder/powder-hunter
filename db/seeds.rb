@@ -1,6 +1,4 @@
-SkiResort.destroy_all
-
-SkiResort.create!([
+resorts = [
   { name_en: 'Niseko United (Hokkaido)', name_ja: 'ニセコユナイテッド', latitude: 42.8688, longitude: 140.6974, elevation_base: 300.0, elevation_top: 1308.0 },
   { name_en: 'Hakuba Valley (Nagano)', name_ja: '白馬バレー', latitude: 36.7001, longitude: 137.8398, elevation_base: 750.0, elevation_top: 1831.0 },
   { name_en: 'Nozawa Onsen (Nagano)', name_ja: '野沢温泉スキー場', latitude: 36.9208, longitude: 138.4501, elevation_base: 565.0, elevation_top: 1650.0 },
@@ -15,5 +13,16 @@ SkiResort.create!([
   { name_en: 'Lotte Arai Resort (Niigata)', name_ja: 'ロッテアライリゾート', latitude: 36.983, longitude: 138.187, elevation_base: 329.0, elevation_top: 1429.0 },
   { name_en: 'Shizukuishi Ski Resort (Iwate)', name_ja: '雫石スキー場', latitude: 39.761, longitude: 140.916, elevation_base: 430.0, elevation_top: 1126.0 },
   { name_en: 'Geto Kogen Resort (Iwate)', name_ja: '夏油高原スキー場', latitude: 39.201, longitude: 140.852, elevation_base: 400.0, elevation_top: 830.0 }
-])
-puts "Seeded #{SkiResort.count} ski resorts!"
+]
+
+resorts.each do |r_attrs|
+  SkiResort.find_or_create_by!(name_ja: r_attrs[:name_ja]) do |resort|
+    resort.name_en = r_attrs[:name_en]
+    resort.latitude = r_attrs[:latitude]
+    resort.longitude = r_attrs[:longitude]
+    resort.elevation_base = r_attrs[:elevation_base]
+    resort.elevation_top = r_attrs[:elevation_top]
+  end
+end
+
+puts "Database seeded: #{SkiResort.count} ski resorts now exist."
