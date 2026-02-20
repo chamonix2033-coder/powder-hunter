@@ -4,10 +4,12 @@ namespace :powder do
     puts "Starting daily powder check at #{Time.current}..."
 
     improved_resorts_data = []
+    
+    all_resorts = SkiResort.all
+    forecasts = OpenMeteoService.fetch_all_forecasts(all_resorts) || {}
 
-    SkiResort.all.each do |resort|
-      service = OpenMeteoService.new(resort)
-      forecast = service.fetch_forecast
+    all_resorts.each do |resort|
+      forecast = forecasts[resort.id]
       
       next unless forecast && forecast['daily']
       
