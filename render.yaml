@@ -23,3 +23,19 @@ services:
         sync: false
       - key: SECRET_KEY_BASE
         generateValue: true
+
+  - type: cron
+    name: powder-hunter-cron
+    env: ruby
+    schedule: "0 0 * * *" # 毎日UTC 0:00 (日本時間 9:00) に実行
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec rake powder:check"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: powder-hunter-db
+          property: connectionString
+      - key: GMAIL_USERNAME
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
