@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<div style="width: 80%; margin: 40px auto; font-family: 'Helvetica Neue', Arial, sans-serif;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="color: #2c3e50;">表示するスキー場を選ぶ（最大3つ）</h1>
+    <div>
+      <span style="font-weight: bold; margin-right: 15px;">現在の選択数: <%= @selected_resort_ids.count %> / 3</span>
+      <%= link_to 'トップページへ戻る', root_path, style: "padding: 8px 15px; background-color: #34495e; color: white; text-decoration: none; border-radius: 4px;", data: { turbo: false } %>
+    </div>
+  </div>
+
+  <% if notice %>
+    <p style="color: #27ae60; font-weight: bold; margin-bottom: 15px;"><%= notice %></p>
+  <% end %>
+  <% if alert %>
+    <p style="color: #e74c3c; font-weight: bold; margin-bottom: 15px;"><%= alert %></p>
+  <% end %>
+
+  <!-- Map Container -->
+  <div id="map" style="height: 500px; width: 100%; margin-bottom: 40px; border-radius: 8px; z-index: 1; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+    <% @ski_resorts.each do |resort| %>
+      <% is_selected = @selected_resort_ids.include?(resort.id) %>
+      <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
+        
+        <div>
+          <h3 style="margin-top: 0; color: #2c3e50;"><%= resort.name_ja.presence || resort.name_en %></h3>
+          <p style="color: #7f8c8d; font-size: 0.9em; margin-bottom: 5px;">
+            <%= resort.name_en %><br>
+            標高: <%= resort.elevation_base %>m
+          </p>
+        </div>
+
+        <div style="margin-top: 15px; text-align: center;">
+          <% if is_selected %>
+            <%= button_to '解除', selection_path(resort.id), method: :delete, style: "width: 100%; padding: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" %>
+          <% else %>
+            <% if @selected_resort_ids.count >= 3 %>
+               <button disabled style="width: 100%; padding: 10px; background-color: #bdc3c7; color: white; border: none; border-radius: 4px; cursor: not-allowed; font-weight: bold;">上限（3つ）到達</button>
+            <% else %>
+              <%= button_to 'トップに表示', selections_path(ski_resort_id: resort.id), method: :post, style: "width: 100%; padding: 10px; background-color: #2980b9; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" %>
+            <% end %>
+          <% end %>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  let mapInstance = null;
+
+  function initMap() {
+    const mapContainerElement = document.getElementById('map');
+    if (!mapContainerElement) return;
+
+    // If the map was already initialized (e.g., navigating back), remove it completely
+    if (mapInstance !== null) {
+      mapInstance.off();
+      mapInstance.remove();
+      mapInstance = null;
+    }
+
+    // 1. Initialize map centered loosely on central Japan
+    mapInstance = L.map('map').setView([38.0, 138.0], 5);
+
+    // 2. Load and display OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(mapInstance);
+
+    // 3. Load JSON data from Ruby
+    const mapData = <%= raw @map_data_json %>;
+    const currentSelectionCount = <%= @selected_resort_ids.count %>;
+    
+    // 4. CSRF Token setup for forms
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+    // 5. Add markers to the map
+    mapData.forEach(resort => {
+      const marker = L.marker([resort.lat, resort.lng]).addTo(mapInstance);
+      
+      // Determine what to show in the popup form
+      let actionFormOutput = '';
+      if (resort.is_selected) {
+        actionFormOutput = `
+          <form action="/selections/${resort.id}" method="post" style="margin-top: 10px;">
+            <input type="hidden" name="_method" value="delete">
+            <input type="hidden" name="authenticity_token" value="${csrfToken}">
+            <button type="submit" style="width: 100%; padding: 8px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">解除</button>
+          </form>
+        `;
+      } else {
+        if (currentSelectionCount >= 3) {
+          actionFormOutput = `
+            <button disabled style="margin-top: 10px; width: 100%; padding: 8px; background-color: #bdc3c7; color: white; border: none; border-radius: 4px; cursor: not-allowed; font-weight: bold;">上限（3つ）到達</button>
+          `;
+        } else {
+          actionFormOutput = `
+            <form action="/selections" method="post" style="margin-top: 10px;">
+              <input type="hidden" name="authenticity_token" value="${csrfToken}">
+              <input type="hidden" name="ski_resort_id" value="${resort.id}">
+              <button type="submit" style="width: 100%; padding: 8px; background-color: #2980b9; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">このスキー場を選択</button>
+            </form>
+          `;
+        }
+      }
+
+      // Format the popup HTML content
+      const popupHtml = `
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; min-width: 150px;">
+          <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1em;">${resort.name}</h3>
+          <p style="margin: 0; color: #555;">Powder Index: <strong style="color: #2980b9;">${resort.powder_index} / 100</strong></p>
+          ${actionFormOutput}
+        </div>
+      `;
+
+      marker.bindPopup(popupHtml);
+    });
+
+    // Fix for Leaflet rendering issues on flex/hidden containers
+    setTimeout(() => {
+      if (mapInstance) {
+        mapInstance.invalidateSize();
+      }
+    }, 100);
+  }
+
+  document.addEventListener("turbo:load", initMap);
+  document.addEventListener("DOMContentLoaded", initMap);
+</script>

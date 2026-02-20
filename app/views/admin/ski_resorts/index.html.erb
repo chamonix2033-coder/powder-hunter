@@ -1,0 +1,40 @@
+<div style="width: 80%; margin: 40px auto; font-family: 'Helvetica Neue', Arial, sans-serif;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="color: #2c3e50;">スキー場管理 (Admin)</h1>
+    <%= link_to '新規追加', new_admin_ski_resort_path, style: "padding: 10px 20px; background-color: #2980b9; color: white; text-decoration: none; border-radius: 4px;" %>
+  </div>
+
+  <% if notice %>
+    <p style="color: green; font-weight: bold;"><%= notice %></p>
+  <% end %>
+
+  <table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <thead>
+      <tr style="background-color: #ecf0f1; border-bottom: 2px solid #bdc3c7;">
+        <th style="padding: 12px; text-align: left;">英語名</th>
+        <th style="padding: 12px; text-align: left;">日本語名</th>
+        <th style="padding: 12px; text-align: left;">緯度 / 経度</th>
+        <th style="padding: 12px; text-align: left;">標高 (Base/Top)</th>
+        <th style="padding: 12px; text-align: center;">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @ski_resorts.each do |resort| %>
+        <tr style="border-bottom: 1px solid #ecf0f1;">
+          <td style="padding: 12px;"><%= resort.name_en %></td>
+          <td style="padding: 12px;"><%= resort.name_ja %></td>
+          <td style="padding: 12px;"><%= resort.latitude %> / <%= resort.longitude %></td>
+          <td style="padding: 12px;"><%= resort.elevation_base %>m / <%= resort.elevation_top %>m</td>
+          <td style="padding: 12px; text-align: center;">
+            <%= link_to '編集', edit_admin_ski_resort_path(resort), style: "color: #f39c12; text-decoration: none; margin-right: 10px;" %>
+            <%= link_to '削除', admin_ski_resort_path(resort), method: :delete, data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' }, style: "color: #e74c3c; text-decoration: none;" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 30px;">
+    <%= link_to '← トップページに戻る', root_path, style: "color: #34495e; text-decoration: none;" %>
+  </div>
+</div>

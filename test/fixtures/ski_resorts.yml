@@ -1,0 +1,35 @@
+resort1:
+  name_ja: 白馬バレー
+  name_en: Hakuba Valley
+  latitude: 36.7001
+  longitude: 137.8398
+  elevation_base: 750.0
+  elevation_top: 2832.0
+  cached_powder_index: 80
+
+resort2:
+  name_ja: ニセコユナイテッド
+  name_en: Niseko United
+  latitude: 42.8631
+  longitude: 140.6975
+  elevation_base: 300.0
+  elevation_top: 1308.0
+  cached_powder_index: 90
+
+resort3:
+  name_ja: 野沢温泉スキー場
+  name_en: Nozawa Onsen Snow Resort
+  latitude: 36.9142
+  longitude: 138.4415
+  elevation_base: 565.0
+  elevation_top: 1650.0
+  cached_powder_index: 0
+
+resort4:
+  name_ja: 妙高杉ノ原
+  name_en: Myoko Suginohara
+  latitude: 36.8833
+  longitude: 138.1667
+  elevation_base: 731.0
+  elevation_top: 1855.0
+  cached_powder_index: 20

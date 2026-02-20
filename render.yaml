@@ -1,0 +1,25 @@
+databases:
+  - name: powder-hunter-db
+    databaseName: powder_hunter
+    user: powder_hunter_user
+    plan: free
+
+services:
+  - type: web
+    name: powder-hunter-web
+    env: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: powder-hunter-db
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: GMAIL_USERNAME
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: SECRET_KEY_BASE
+        generateValue: true

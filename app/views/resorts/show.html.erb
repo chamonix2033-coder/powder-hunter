@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= @resort.name_ja.presence || @resort.name_en %> - Powder Hunter</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+    .back-link {
+      display: inline-block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .back-link:hover {
+      background-color: #2980b9;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .high-powder {
+      background-color: #d1ecf1 !important;
+      font-weight: bold;
+      color: #0c5460;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1><%= @resort.name_ja.presence || @resort.name_en %></h1>
+    <p>Elevation: <%= @resort.elevation_base %>m | Lat: <%= @resort.latitude %> | Lon: <%= @resort.longitude %></p>
+  </header>
+
+  <div class="container">
+    <%= link_to "← 戻る (Back to Top)", root_path, class: "back-link" %>
+    
+    <h2>14-Day Powder Forecast</h2>
+
+    <% if @daily_forecasts.any? %>
+      <table>
+        <thead>
+          <tr>
+            <th>日付 (Date)</th>
+            <th>天気 (Snowfall)</th>
+            <th>最低/最高気温 (Min/Max Temp)</th>
+            <th>パウダー指数 (Powder Index)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @daily_forecasts.each do |forecast| %>
+            <tr class="<%= 'high-powder' if forecast[:powder_index] > 50 %>">
+              <td><%= forecast[:date] %></td>
+              <td><%= forecast[:weather] %></td>
+              <td><%= forecast[:min_temp] %>°C / <%= forecast[:max_temp] %>°C</td>
+              <td><%= forecast[:powder_index] %> / 100</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p>Data could not be fetched. Please try again later.</p>
+    <% end %>
+  </div>
+
+</body>
+</html>

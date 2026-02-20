@@ -1,0 +1,14 @@
+<%= @user.email %> 様
+
+Powder Hunterからの最新のパウダー情報です！
+昨日までパウダー予報がなかったスキー場で、新たにパウダーチャンスが到来しました。
+
+【スキー場】 <%= @resort.name_ja.presence || @resort.name_en %>
+【パウダー到来日】 <%= @powder_date %>
+【パウダー指数】 <%= @index_val %> / 100
+
+詳細は Powder Hunter をご確認ください！
+http://localhost:3000/resorts/<%= @resort.id %>
+
+--
+Powder Hunter
