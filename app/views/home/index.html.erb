@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Powder Hunter - Find the Best Backcountry Powder</title>
+  <meta name="description" content="Powder Hunter helps you find the best backcountry powder snow in Japan. 14-day forecasts for top ski resorts.">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ===== Fullscreen Slideshow ===== */
+    .slideshow-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      animation: slideAnimation 18s infinite;
+    }
+
+    .slide:nth-child(1) { background-image: url('/images/hero_1.png'); animation-delay: 0s; }
+    .slide:nth-child(2) { background-image: url('/images/hero_2.png'); animation-delay: 6s; }
+    .slide:nth-child(3) { background-image: url('/images/hero_3.png'); animation-delay: 12s; }
+
+    @keyframes slideAnimation {
+      0%   { opacity: 0; transform: scale(1.05); }
+      5%   { opacity: 1; }
+      28%  { opacity: 1; }
+      33%  { opacity: 0; transform: scale(1); }
+      100% { opacity: 0; }
+    }
+
+    /* Dark overlay for readability */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(
+        180deg,
+        rgba(0,0,0,0.3) 0%,
+        rgba(0,0,0,0.15) 40%,
+        rgba(0,0,0,0.4) 80%,
+        rgba(0,0,0,0.7) 100%
+      );
+      z-index: 0;
+    }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%);
+    }
+
+    .nav-logo {
+      font-size: 1.4em;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .nav-logo span {
+      color: #3498db;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 400;
+      font-size: 0.95em;
+      padding: 8px 18px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+
+    .nav-links a.btn-signup {
+      background: #3498db;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-links a.btn-signup:hover {
+      background: #2980b9;
+    }
+
+    /* ===== Hero Content ===== */
+    .hero {
+      position: relative;
+      z-index: 5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero h1 {
+      font-size: 4.5em;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #3498db, #1abc9c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .tagline {
+      font-size: 1.4em;
+      font-weight: 300;
+      color: rgba(255,255,255,0.85);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+      margin-bottom: 15px;
+      max-width: 600px;
+      line-height: 1.6;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .hero .sub-tagline {
+      font-size: 1.1em;
+      font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 40px;
+      animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Feature Badges ===== */
+    .features {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 50px;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .feature-badge {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 15px 20px;
+      text-align: center;
+      min-width: 140px;
+    }
+
+    .feature-badge .icon {
+      font-size: 1.8em;
+      margin-bottom: 6px;
+    }
+
+    .feature-badge .label {
+      font-size: 0.85em;
+      font-weight: 400;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ===== CTA Button ===== */
+    .cta-button {
+      display: inline-block;
+      padding: 18px 45px;
+      background: linear-gradient(135deg, #3498db, #1abc9c);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: 700;
+      border-radius: 50px;
+      box-shadow: 0 8px 30px rgba(52, 152, 219, 0.4);
+      transition: all 0.3s ease;
+      animation: fadeInUp 1s ease-out 0.8s both;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(52, 152, 219, 0.5);
+    }
+
+    /* ===== Scroll Indicator ===== */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      animation: bounce 2s infinite;
+      color: rgba(255,255,255,0.5);
+      font-size: 1.5em;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%     { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.8em; }
+      .hero .tagline { font-size: 1.1em; }
+      .features { flex-direction: column; gap: 15px; align-items: center; }
+      nav { padding: 15px 20px; }
+      .nav-logo { font-size: 1.1em; }
+      .nav-links a { margin-left: 10px; font-size: 0.85em; padding: 6px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slideshow Background -->
+  <div class="slideshow-container">
+    <div class="slide"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+  </div>
+  <div class="overlay"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-logo">Powder <span>Hunter</span></div>
+    <div class="nav-links">
+      <%= link_to 'ログイン', new_user_session_path %>
+      <%= link_to '新規登録', new_user_registration_path, class: 'btn-signup' %>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>POWDER <span>HUNTER</span></h1>
+    <p class="tagline">日本のバックカントリーで、最高のパウダースノーに出会おう。</p>
+    <p class="sub-tagline">14日間の天気予報から、パウダー日をAIが自動検出。</p>
+
+    <div class="features">
+      <div class="feature-badge">
+        <div class="icon">🏔️</div>
+        <div class="label">14スキー場</div>
+      </div>
+      <div class="feature-badge">
+        <div class="icon">📊</div>
+        <div class="label">パウダー指数</div>
+      </div>
+      <div class="feature-badge">
+        <div class="icon">📧</div>
+        <div class="label">自動通知</div>
+      </div>
+    </div>
+
+    <%= link_to '全スキー場のパウダー情報を見る →', resorts_path, class: 'cta-button' %>
+  </div>
+
+  <div class="scroll-indicator">▼</div>
+
+</body>
+</html>

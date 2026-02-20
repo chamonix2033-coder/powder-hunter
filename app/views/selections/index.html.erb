@@ -35,12 +35,12 @@
 
         <div style="margin-top: 15px; text-align: center;">
           <% if is_selected %>
-            <%= button_to '解除', selection_path(resort.id), method: :delete, style: "width: 100%; padding: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" %>
+            <%= button_to '解除', selection_path(resort.id), method: :delete, data: { turbo: false }, style: "width: 100%; padding: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" %>
           <% else %>
             <% if @selected_resort_ids.count >= 3 %>
                <button disabled style="width: 100%; padding: 10px; background-color: #bdc3c7; color: white; border: none; border-radius: 4px; cursor: not-allowed; font-weight: bold;">上限（3つ）到達</button>
             <% else %>
-              <%= button_to 'トップに表示', selections_path(ski_resort_id: resort.id), method: :post, style: "width: 100%; padding: 10px; background-color: #2980b9; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" %>
+              <%= button_to 'トップに表示', selections_path(ski_resort_id: resort.id), method: :post, data: { turbo: false }, style: "width: 100%; padding: 10px; background-color: #2980b9; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" %>
             <% end %>
           <% end %>
         </div>

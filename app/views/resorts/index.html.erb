@@ -106,6 +106,7 @@
         <%= current_user.email %> さん | 
         <%= button_to 'ログアウト', destroy_user_session_path, method: :delete, data: { turbo: false }, form: { style: "display: inline-block; margin: 0;", data: { turbo: false } }, style: "background: none; border: none; padding: 0; color: #ecf0f1; text-decoration: underline; cursor: pointer; font-family: inherit; font-size: inherit;" %>
       <% else %>
+        <%= link_to 'トップページ', root_path, style: "color: #f39c12; font-weight: bold; margin-right: 15px; text-decoration: underline;" %>
         <%= link_to '新規登録', new_user_registration_path, style: "color: #ecf0f1; text-decoration: underline;" %> | 
         <%= link_to 'ログイン', new_user_session_path, style: "color: #ecf0f1; text-decoration: underline;" %>
       <% end %>

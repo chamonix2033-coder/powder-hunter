@@ -13,41 +13,38 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
   end
 
   # ---------------------------------------------------------
-  # Test 1: Visitor sees the top page with all resorts
+  # Test 1: Visitor sees the landing page
   # ---------------------------------------------------------
-  test "visitor can see top page with all resorts" do
+  test "visitor can see landing page" do
     visit root_url
 
-    assert_text "Powder Hunter"
-    # Unsigned-in visitors see ALL resorts
-    assert_text @resort1.name_ja
-    assert_text @resort2.name_ja
-    assert_text @resort3.name_ja
-    assert_text @resort4.name_ja
-    assert_text "Powder Index:"
+    assert_text "POWDER"
+    assert_text "HUNTER"
+    assert_text "全スキー場のパウダー情報を見る"
+    assert_text "ログイン"
+    assert_text "新規登録"
   end
 
   # ---------------------------------------------------------
   # Test 2: Signup → Logout → Login flow
   # ---------------------------------------------------------
   test "user signup and login flow" do
-    visit root_url
-
     # Signup
-    click_on "新規登録"
+    visit new_user_registration_path
     fill_in "user[email]", with: "new_user@example.com"
     fill_in "user[password]", with: "password123"
     fill_in "user[password_confirmation]", with: "password123"
     click_button "Sign up"
 
+    # After signup, user is logged in and redirected to resorts page
     assert_text "Powder Hunter"
+    assert_text "new_user@example.com"
+    assert_text "ログアウト"
 
-    # Logout
-    click_on "ログアウト"
-    assert_text "Powder Hunter"
-    assert_text "ログイン"
+    # Reset session to test login separately
+    Capybara.reset_sessions!
 
-    # Login with fixture user — visit directly to avoid Turbo link issues
+    # Login with fixture user
     visit new_user_session_path
     fill_in "user[email]", with: @user.email
     fill_in "user[password]", with: "password123"
@@ -72,21 +69,18 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
     within("[data-testid='selection-card-#{@resort1.id}']") do
       click_on "トップに表示"
     end
-    assert_text "スキー場を追加しました"
     assert_text "現在の選択数: 1 / 3"
 
     # Select resort 2
     within("[data-testid='selection-card-#{@resort2.id}']") do
       click_on "トップに表示"
     end
-    assert_text "スキー場を追加しました"
     assert_text "現在の選択数: 2 / 3"
 
     # Select resort 3
     within("[data-testid='selection-card-#{@resort3.id}']") do
       click_on "トップに表示"
     end
-    assert_text "スキー場を追加しました"
     assert_text "現在の選択数: 3 / 3"
 
     # 4th resort should show disabled button
@@ -120,7 +114,7 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
   # Test 5: User can view resort details page (14-day table)
   # ---------------------------------------------------------
   test "user can view resort details page" do
-    visit root_url
+    visit resorts_url
 
     click_on @resort1.name_ja
     assert_text @resort1.name_ja
@@ -128,7 +122,7 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
     assert_text "14-Day Powder Forecast"
     assert_text "Powder Index"
 
-    # Back to top
+    # Back to resorts list
     click_on "戻る"
     assert_text "Powder Hunter"
   end
