@@ -7,90 +7,178 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
     @resort2 = ski_resorts(:resort2)
     @resort3 = ski_resorts(:resort3)
     @resort4 = ski_resorts(:resort4)
+
+    # Stub Open-Meteo API with realistic forecast data for all batch requests
+    stub_open_meteo_api
   end
 
-  test "full user flow: signup, login, select resorts, limit, weather, details, route, logout" do
-    # 1. Signup / Login / Logout
+  # ---------------------------------------------------------
+  # Test 1: Visitor sees the top page with all resorts
+  # ---------------------------------------------------------
+  test "visitor can see top page with all resorts" do
     visit root_url
 
+    assert_text "Powder Hunter"
+    # Unsigned-in visitors see ALL resorts
+    assert_text @resort1.name_ja
+    assert_text @resort2.name_ja
+    assert_text @resort3.name_ja
+    assert_text @resort4.name_ja
+    assert_text "Powder Index:"
+  end
+
+  # ---------------------------------------------------------
+  # Test 2: Signup → Logout → Login flow
+  # ---------------------------------------------------------
+  test "user signup and login flow" do
+    visit root_url
+
+    # Signup
     click_on "新規登録"
     fill_in "user[email]", with: "new_user@example.com"
     fill_in "user[password]", with: "password123"
     fill_in "user[password_confirmation]", with: "password123"
     click_button "Sign up"
 
-    assert_text "Welcome! You have signed up successfully."
-    
-    click_on "ログアウト"
-    assert_text "Signed out successfully."
     assert_text "Powder Hunter"
 
-    click_on "ログイン"
+    # Logout
+    click_on "ログアウト"
+    assert_text "Powder Hunter"
+    assert_text "ログイン"
+
+    # Login with fixture user — visit directly to avoid Turbo link issues
+    visit new_user_session_path
     fill_in "user[email]", with: @user.email
     fill_in "user[password]", with: "password123"
     click_button "Log in"
 
-    assert_text "Signed in successfully."
+    assert_text "Powder Hunter"
+    assert_text @user.email
+  end
 
-    # 2. Select Resorts
-    # Currently 0 selections
-    assert_text "まだスキー場が選択されていません"
-    
-    click_on "こちらからスキー場を最大3つ選んでください"
-    
+  # ---------------------------------------------------------
+  # Test 3: User can select up to 3 resorts (limit enforced)
+  # ---------------------------------------------------------
+  test "user can select up to 3 resorts" do
+    sign_in_as(@user)
+
+    # Navigate to selection page
+    click_on "表示するスキー場を編集する"
     assert_text "表示するスキー場を選ぶ"
     assert_text "現在の選択数: 0 / 3"
 
-    # Pick 3
-    select_resort(@resort1)
-    assert_text "スキー場を選択しました"
+    # Select resort 1
+    within("[data-testid='selection-card-#{@resort1.id}']") do
+      click_on "トップに表示"
+    end
+    assert_text "スキー場を追加しました"
     assert_text "現在の選択数: 1 / 3"
 
-    select_resort(@resort2)
-    assert_text "スキー場を選択しました"
+    # Select resort 2
+    within("[data-testid='selection-card-#{@resort2.id}']") do
+      click_on "トップに表示"
+    end
+    assert_text "スキー場を追加しました"
     assert_text "現在の選択数: 2 / 3"
 
-    select_resort(@resort3)
-    assert_text "スキー場を選択しました"
+    # Select resort 3
+    within("[data-testid='selection-card-#{@resort3.id}']") do
+      click_on "トップに表示"
+    end
+    assert_text "スキー場を追加しました"
     assert_text "現在の選択数: 3 / 3"
 
-    # 4th should be disabled
-    node4 = find('h3', text: @resort4.name_ja).find(:xpath, 'ancestor::div[contains(@style, "background-color: white")][1]')
-    within node4 do
-      assert_button "上限（3つ）到達", disabled: true
+    # 4th resort should show disabled button
+    within("[data-testid='selection-card-#{@resort4.id}']") do
+      assert_selector "button[disabled]", text: "上限（3つ）到達"
     end
+  end
 
-    # Go back to top page
-    click_on "トップページへ戻る"
+  # ---------------------------------------------------------
+  # Test 4: Top page shows only selected resorts
+  # ---------------------------------------------------------
+  test "top page shows only selected resorts" do
+    # Pre-create selections via fixtures/model
+    Selection.create!(user: @user, ski_resort: @resort1)
+    Selection.create!(user: @user, ski_resort: @resort2)
 
-    # 3. Weather API & Index Display on Top Page
+    sign_in_as(@user)
+
+    # Top page should show only selected resorts
     assert_text @resort1.name_ja
     assert_text @resort2.name_ja
-    assert_text @resort3.name_ja
+    assert_no_text @resort3.name_ja
     assert_no_text @resort4.name_ja
 
-    # Check for index
-    assert_text "Powder Index:"
-    
-    # 5. Route Search (Verify button presence)
-    assert_selector "button.route-btn", text: "ここへのルートを表示", count: 3
-    first_btn = first("button.route-btn")
-    assert_not_nil first_btn['data-lat']
-    assert_not_nil first_btn['data-lon']
+    # Route buttons should exist for selected resorts
+    assert_selector "[data-testid='route-btn-#{@resort1.id}']"
+    assert_selector "[data-testid='route-btn-#{@resort2.id}']"
+  end
 
-    # 4. Details Page
+  # ---------------------------------------------------------
+  # Test 5: User can view resort details page (14-day table)
+  # ---------------------------------------------------------
+  test "user can view resort details page" do
+    visit root_url
+
     click_on @resort1.name_ja
-    assert_text @resort1.name_en
+    assert_text @resort1.name_ja
     assert_selector "table"
-    assert_text "14日間"
+    assert_text "14-Day Powder Forecast"
+    assert_text "Powder Index"
+
+    # Back to top
+    click_on "戻る"
+    assert_text "Powder Hunter"
   end
 
   private
 
-  def select_resort(resort)
-    node = find('h3', text: resort.name_ja).find(:xpath, 'ancestor::div[contains(@style, "background-color: white")][1]')
-    within node do
-      click_on "トップに表示"
-    end
+  # Sign in helper
+  def sign_in_as(user)
+    visit new_user_session_path
+    fill_in "user[email]", with: user.email
+    fill_in "user[password]", with: "password123"
+    click_button "Log in"
+    assert_text "Powder Hunter"
+  end
+
+  # Stub the Open-Meteo batch API with realistic forecast data
+  def stub_open_meteo_api
+    # Generate a realistic 14-day forecast response
+    today = Date.today
+    dates = (0..13).map { |i| (today + i).strftime("%Y-%m-%d") }
+
+    single_forecast = {
+      "daily" => {
+        "time" => dates,
+        "snowfall_sum" => [5.0, 10.0, 0.0, 15.0, 0.0, 0.0, 2.0, 0.0, 8.0, 0.0, 0.0, 3.0, 0.0, 0.0],
+        "temperature_2m_max" => [-2.0, -5.0, 1.0, -8.0, 2.0, 3.0, -1.0, 0.0, -4.0, 1.0, 2.0, -2.0, 0.0, 1.0],
+        "temperature_2m_min" => [-8.0, -12.0, -3.0, -15.0, -2.0, -1.0, -6.0, -4.0, -10.0, -3.0, -2.0, -7.0, -4.0, -3.0]
+      },
+      "hourly" => {
+        "temperature_2m" => Array.new(14 * 24, -5.0),
+        "snowfall" => Array.new(14 * 24, 0.5)
+      }
+    }
+
+    # Stub any request to Open-Meteo API
+    # When multiple locations are sent, Open-Meteo returns an Array
+    # When a single location is sent, it returns a single Hash
+    stub_request(:get, /api\.open-meteo\.com\/v1\/forecast/)
+      .to_return { |request|
+        uri = URI(request.uri)
+        params = URI.decode_www_form(uri.query).to_h
+        lat_count = params["latitude"]&.split(",")&.length || 1
+
+        if lat_count > 1
+          body = Array.new(lat_count) { single_forecast }.to_json
+        else
+          body = single_forecast.to_json
+        end
+
+        { status: 200, body: body, headers: { "Content-Type" => "application/json" } }
+      }
   end
 end

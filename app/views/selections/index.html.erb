@@ -23,7 +23,7 @@
   <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
     <% @ski_resorts.each do |resort| %>
       <% is_selected = @selected_resort_ids.include?(resort.id) %>
-      <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
+      <div data-testid="selection-card-<%= resort.id %>" style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
         
         <div>
           <h3 style="margin-top: 0; color: #2c3e50;"><%= resort.name_ja.presence || resort.name_en %></h3>

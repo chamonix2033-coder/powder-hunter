@@ -131,7 +131,7 @@
       </div>
     <% else %>
       <% @api_data.each do |data| %>
-        <div class="resort-card">
+        <div class="resort-card" data-testid="resort-card-<%= data[:resort].id %>">
           <div class="resort-image">
             <!-- Assign basic emoji depending on index -->
             <% if data[:powder_index] > 50 %>
@@ -158,6 +158,7 @@
               <small>Elev: <%= data[:resort].elevation_base %>m | Lat: <%= data[:resort].latitude %> | Lon: <%= data[:resort].longitude %></small>
             </p>
             <button class="route-btn" 
+                    data-testid="route-btn-<%= data[:resort].id %>"
                     data-lat="<%= data[:resort].latitude %>" 
                     data-lon="<%= data[:resort].longitude %>">
               🚗 ここへのルートを表示
