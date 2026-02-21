@@ -4,19 +4,19 @@ namespace :powder do
     puts "Starting daily powder check at #{Time.current}..."
 
     improved_resorts_data = []
-    
+
     all_resorts = SkiResort.all
     forecasts = OpenMeteoService.fetch_all_forecasts(all_resorts) || {}
 
     all_resorts.each do |resort|
       forecast = forecasts[resort.id]
-      
-      next unless forecast && forecast['daily']
-      
-      time_array = forecast['daily']['time']
-      snowfall_array = forecast['daily']['snowfall_sum']
-      max_temp_array = forecast['daily']['temperature_2m_max']
-      
+
+      next unless forecast && forecast["daily"]
+
+      time_array = forecast["daily"]["time"]
+      snowfall_array = forecast["daily"]["snowfall_sum"]
+      max_temp_array = forecast["daily"]["temperature_2m_max"]
+
       # Determine if there's a powder day in the 14-day window
       next_powder_day = nil
       current_powder_index = 0
@@ -26,7 +26,7 @@ namespace :powder do
       today_max_temp = max_temp_array[0] || 0
       today_penalty = today_max_temp > 0 ? (today_max_temp * 2) : 0
       today_index_val = today_snow - today_penalty
-      today_powder_index = today_index_val > 0 ? [(today_index_val * 2).round, 100].min : 0
+      today_powder_index = today_index_val > 0 ? [ (today_index_val * 2).round, 100 ].min : 0
 
       # Check for next powder day in the 14-day window
       time_array.each_with_index do |date_str, idx|
@@ -34,8 +34,8 @@ namespace :powder do
         d_max = max_temp_array[idx] || 0
         d_pen = d_max > 0 ? (d_max * 2) : 0
         d_idx = d_snow - d_pen
-        d_pow = d_idx > 0 ? [(d_idx * 2).round, 100].min : 0
-        
+        d_pow = d_idx > 0 ? [ (d_idx * 2).round, 100 ].min : 0
+
         if d_pow > 0
           date_obj = Date.parse(date_str)
           next_powder_day = {
@@ -64,7 +64,7 @@ namespace :powder do
       # Also cache today's powder index for fast map loading
       resort.update!(last_powder_index: current_powder_index, cached_powder_index: today_powder_index)
     end
-    
+
     # Process Grouped Emails
     if improved_resorts_data.any?
       puts "Processing email deliveries for users..."
@@ -83,7 +83,7 @@ namespace :powder do
     else
       puts "No powder condition changes to notify about today."
     end
-    
+
     puts "Finished powder check."
   end
 end
