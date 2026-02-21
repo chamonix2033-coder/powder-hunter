@@ -67,19 +67,19 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
 
     # Select resort 1
     within("[data-testid='selection-card-#{@resort1.id}']") do
-      click_on "トップに表示"
+      click_button "トップに表示"
     end
     assert_text "現在の選択数: 1 / 3"
 
     # Select resort 2
     within("[data-testid='selection-card-#{@resort2.id}']") do
-      click_on "トップに表示"
+      click_button "トップに表示"
     end
     assert_text "現在の選択数: 2 / 3"
 
     # Select resort 3
     within("[data-testid='selection-card-#{@resort3.id}']") do
-      click_on "トップに表示"
+      click_button "トップに表示"
     end
     assert_text "現在の選択数: 3 / 3"
 

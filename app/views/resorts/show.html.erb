@@ -2,6 +2,7 @@
 <html>
 <head>
   <title><%= @resort.name_ja.presence || @resort.name_en %> - Powder Hunter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -69,6 +70,16 @@
       background-color: #d1ecf1 !important;
       font-weight: bold;
       color: #0c5460;
+    }
+
+    /* ===== Mobile Responsive ===== */
+    @media (max-width: 768px) {
+      h1 { font-size: 1.5em; }
+      header p { font-size: 0.85em; }
+      .container { width: 95%; padding: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      th, td { padding: 8px 6px; font-size: 0.8em; white-space: nowrap; }
+      h2 { font-size: 1.2em; }
+      .back-link { padding: 8px 15px; font-size: 0.9em; }
     }
   </style>
 </head>

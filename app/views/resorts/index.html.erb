@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Powder Hunter - Backcountry Ski Resorts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -90,6 +91,25 @@
     }
     .route-btn:hover {
       background-color: #2ecc71;
+    }
+
+    /* ===== Mobile Responsive ===== */
+    @media (max-width: 768px) {
+      h1 { font-size: 1.6em; }
+      p.subtitle { font-size: 0.85em; }
+      .container { width: 95%; margin: 20px auto; }
+      .resort-card { width: 100%; }
+      .resort-image { height: 120px; }
+      .resort-info { padding: 15px; }
+      .resort-name { font-size: 1.2em; }
+      .resort-desc { font-size: 0.9em; }
+      .route-btn { width: 100%; padding: 12px; font-size: 1em; }
+      header > div:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
     }
   </style>
 </head>
