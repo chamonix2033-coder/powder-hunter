@@ -6,6 +6,11 @@ require "webmock/minitest"
 # Allow localhost connections for Capybara/Selenium, but stub external APIs
 WebMock.disable_net_connect!(allow_localhost: true)
 
+# Include Devise test helpers for integration tests
+class ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+end
+
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
