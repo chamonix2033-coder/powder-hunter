@@ -14,7 +14,7 @@ class SelectionsController < ApplicationController
         is_selected: @selected_resort_ids.include?(resort.id)
       }
     end
-    
+
     @map_data_json = map_data.to_json
   end
 

@@ -91,7 +91,7 @@ class ResortsController < ApplicationController
         index_val = snowfall - temp_penalty
         powder_index = index_val > 0 ? [ (index_val * 2).round, 100 ].min : 0
 
-        weather_emoji = powder_index > 50 ? '🏔️' : (snowfall > 0 ? '❄️' : (max_temp > 5 ? '☀️' : '⛄️'))
+        weather_emoji = powder_index > 50 ? "🏔️" : (snowfall > 0 ? "❄️" : (max_temp > 5 ? "☀️" : "⛄️"))
 
         @daily_forecasts << {
           date: date_str,

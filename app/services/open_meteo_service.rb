@@ -1,5 +1,5 @@
-require 'net/http'
-require 'json'
+require "net/http"
+require "json"
 
 class OpenMeteoService
   BASE_URL = 'https://api.open-meteo.com/v1/forecast'.freeze
