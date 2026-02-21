@@ -10,18 +10,18 @@ class ResortsController < ApplicationController
 
     @api_data = @resorts.map do |resort|
       forecast = forecasts[resort.id]
-      
+
       powder_index = 0
       next_24h_snow = 0
       temperature = nil
       next_powder_day = nil
-      
-      if forecast && forecast['daily']
-        time_array = forecast['daily']['time']
-        snowfall_array = forecast['daily']['snowfall_sum']
-        max_temp_array = forecast['daily']['temperature_2m_max']
-        min_temp_array = forecast['daily']['temperature_2m_min']
-        
+
+      if forecast && forecast["daily"]
+        time_array = forecast["daily"]["time"]
+        snowfall_array = forecast["daily"]["snowfall_sum"]
+        max_temp_array = forecast["daily"]["temperature_2m_max"]
+        min_temp_array = forecast["daily"]["temperature_2m_min"]
+
         # Use the first day (today/tomorrow) for the index
         next_24h_snow = snowfall_array[0] || 0
         max_temp = max_temp_array[0] || 0
@@ -75,11 +75,11 @@ class ResortsController < ApplicationController
     
     @daily_forecasts = []
     
-    if forecast && forecast['daily']
-      time_array = forecast['daily']['time']
-      snowfall_array = forecast['daily']['snowfall_sum']
-      max_temp_array = forecast['daily']['temperature_2m_max']
-      min_temp_array = forecast['daily']['temperature_2m_min']
+    if forecast && forecast["daily"]
+      time_array = forecast["daily"]["time"]
+      snowfall_array = forecast["daily"]["snowfall_sum"]
+      max_temp_array = forecast["daily"]["temperature_2m_max"]
+      min_temp_array = forecast["daily"]["temperature_2m_min"]
       
       time_array.each_with_index do |date_str, index|
         snowfall = snowfall_array[index] || 0

@@ -1,7 +1,7 @@
 class Admin::SkiResortsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_admin!
-  before_action :set_ski_resort, only: [:edit, :update, :destroy]
+  before_action :set_ski_resort, only: [ :edit, :update, :destroy ]
 
   def index
     @ski_resorts = SkiResort.all.order(created_at: :desc)
@@ -14,7 +14,7 @@ class Admin::SkiResortsController < ApplicationController
   def create
     @ski_resort = SkiResort.new(ski_resort_params)
     if @ski_resort.save
-      redirect_to admin_ski_resorts_path, notice: 'スキー場を追加しました。'
+      redirect_to admin_ski_resorts_path, notice: "スキー場を追加しました。"
     else
       render :new, status: :unprocessable_entity
     end
