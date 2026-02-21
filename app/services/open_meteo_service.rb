@@ -40,7 +40,7 @@ class OpenMeteoService
         if response.is_a?(Net::HTTPSuccess)
           parsed = JSON.parse(response.body)
           # Open-Meteo returns an Array if multiple locations, but a Hash if only 1 location
-          results_array = parsed.is_a?(Array) ? parsed : [parsed]
+          results_array = parsed.is_a?(Array) ? parsed : [ parsed ]
 
           # Map the response objects back to the resort IDs in the same order
           forecasts_by_resort_id = {}
