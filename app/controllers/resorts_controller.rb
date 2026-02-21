@@ -5,9 +5,9 @@ class ResortsController < ApplicationController
     else
       @resorts = SkiResort.all.order(name_ja: :asc)
     end
-    
+
     forecasts = OpenMeteoService.fetch_all_forecasts(@resorts) || {}
-    
+
     @api_data = @resorts.map do |resort|
       forecast = forecasts[resort.id]
       

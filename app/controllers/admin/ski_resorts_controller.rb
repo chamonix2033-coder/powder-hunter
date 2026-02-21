@@ -25,7 +25,7 @@ class Admin::SkiResortsController < ApplicationController
 
   def update
     if @ski_resort.update(ski_resort_params)
-      redirect_to admin_ski_resorts_path, notice: 'スキー場を更新しました。'
+      redirect_to admin_ski_resorts_path, notice: "スキー場を更新しました。"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -33,14 +33,14 @@ class Admin::SkiResortsController < ApplicationController
 
   def destroy
     @ski_resort.destroy
-    redirect_to admin_ski_resorts_path, notice: 'スキー場を削除しました。'
+    redirect_to admin_ski_resorts_path, notice: "スキー場を削除しました。"
   end
 
   private
 
   def require_admin!
     unless current_user&.admin?
-      redirect_to root_path, alert: '管理者権限がありません。'
+      redirect_to root_path, alert: "管理者権限がありません。"
     end
   end
 
