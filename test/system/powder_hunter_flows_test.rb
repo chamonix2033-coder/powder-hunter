@@ -69,18 +69,21 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
     within("[data-testid='selection-card-#{@resort1.id}']") do
       click_button "トップに表示"
     end
+    assert_no_text "現在の選択数: 0 / 3", wait: 5
     assert_text "現在の選択数: 1 / 3"
 
     # Select resort 2
     within("[data-testid='selection-card-#{@resort2.id}']") do
       click_button "トップに表示"
     end
+    assert_no_text "現在の選択数: 1 / 3", wait: 5
     assert_text "現在の選択数: 2 / 3"
 
     # Select resort 3
     within("[data-testid='selection-card-#{@resort3.id}']") do
       click_button "トップに表示"
     end
+    assert_no_text "現在の選択数: 2 / 3", wait: 5
     assert_text "現在の選択数: 3 / 3"
 
     # 4th resort should show disabled button
