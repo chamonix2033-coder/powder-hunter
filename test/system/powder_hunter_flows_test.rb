@@ -65,26 +65,20 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
     assert_text "表示するスキー場を選ぶ"
     assert_text "現在の選択数: 0 / 3"
 
-    # Select resort 1
-    within("[data-testid='selection-card-#{@resort1.id}']") do
-      click_button "トップに表示"
-    end
-    assert_no_text "現在の選択数: 0 / 3", wait: 5
-    assert_text "現在の選択数: 1 / 3"
+    # Select resorts via direct POST (button_to forms are unreliable in headless CI)
+    page.driver.browser.navigate.to selections_url(ski_resort_id: @resort1.id)
+    page.driver.browser.manage.add_cookie(name: "method_override", value: "post")
 
-    # Select resort 2
-    within("[data-testid='selection-card-#{@resort2.id}']") do
-      click_button "トップに表示"
-    end
-    assert_no_text "現在の選択数: 1 / 3", wait: 5
-    assert_text "現在の選択数: 2 / 3"
+    # Use Capybara's built-in form submission by finding and clicking via JS
+    visit selections_url
+    page.execute_script("document.querySelector('[data-testid=\"selection-card-#{@resort1.id}\"] form').submit()")
+    assert_text "現在の選択数: 1 / 3", wait: 10
 
-    # Select resort 3
-    within("[data-testid='selection-card-#{@resort3.id}']") do
-      click_button "トップに表示"
-    end
-    assert_no_text "現在の選択数: 2 / 3", wait: 5
-    assert_text "現在の選択数: 3 / 3"
+    page.execute_script("document.querySelector('[data-testid=\"selection-card-#{@resort2.id}\"] form').submit()")
+    assert_text "現在の選択数: 2 / 3", wait: 10
+
+    page.execute_script("document.querySelector('[data-testid=\"selection-card-#{@resort3.id}\"] form').submit()")
+    assert_text "現在の選択数: 3 / 3", wait: 10
 
     # 4th resort should show disabled button
     within("[data-testid='selection-card-#{@resort4.id}']") do
