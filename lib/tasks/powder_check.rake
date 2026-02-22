@@ -77,7 +77,12 @@ namespace :powder do
 
         if matching_data.any?
           puts " -> Sending alert to #{user.email} for #{matching_data.size} matched resorts."
-          PowderNotifierMailer.powder_alert(user, matching_data).deliver_now
+          begin
+            PowderNotifierMailer.powder_alert(user, matching_data).deliver_now
+            puts "    ✅ Email sent successfully to #{user.email}"
+          rescue => e
+            puts "    ❌ Email delivery FAILED for #{user.email}: #{e.class} - #{e.message}"
+          end
         end
       end
     else
