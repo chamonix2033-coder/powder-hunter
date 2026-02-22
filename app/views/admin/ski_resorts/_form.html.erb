@@ -56,6 +56,11 @@
     </div>
   </div>
 
+  <div style="margin-bottom: 15px;">
+    <%= form.label :last_powder_date, "Last Powder Date (前回パウダー予報日)", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.date_field :last_powder_date, style: "padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;" %>
+  </div>
+
   <div style="margin-top: 20px;">
     <%= form.submit "保存する", style: "padding: 10px 20px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;" %>
     <%= link_to 'キャンセル', admin_ski_resorts_path, style: "margin-left: 15px; color: #7f8c8d; text-decoration: none;" %>

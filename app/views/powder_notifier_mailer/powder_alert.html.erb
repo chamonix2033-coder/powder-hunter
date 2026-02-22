@@ -1,18 +1,27 @@
 <h2><%= @user.email %> 様</h2>
 
 <p>Powder Hunterからの最新のパウダー情報です！</p>
-<p>昨日までパウダー予報がなかったお気に入りスキー場で、新たにパウダーチャンスが到来しました。</p>
 
 <% @matching_resorts_data.each do |data| %>
   <% resort = data[:resort] %>
   <% resort_name = resort.name_ja.presence || resort.name_en %>
-  
+
   <h3>🏂 <%= resort_name %></h3>
+
+  <% case data[:reason] %>
+  <% when :new %>
+    <p style="color: #27ae60; font-weight: bold;">🆕 新たにパウダーチャンスが到来しました！</p>
+  <% when :earlier %>
+    <p style="color: #2980b9; font-weight: bold;">⏩ パウダーチャンス日が早まりました！（前回: <%= data[:last_date_str] %> → 今回: <%= data[:date] %>）</p>
+  <% when :later %>
+    <p style="color: #e67e22; font-weight: bold;">⏪ パウダーチャンス日が遅れそうです（前回: <%= data[:last_date_str] %> → 今回: <%= data[:date] %>）</p>
+  <% end %>
+
   <ul>
     <li><strong>パウダー到来日:</strong> <%= data[:date] %></li>
     <li><strong>パウダー指数:</strong> <%= data[:index] %> / 100</li>
   </ul>
-  <p>詳細は <%= link_to 'スキー場情報', resort_url(resort) %> をご確認ください！</p>
+  <p>詳細は <%= link_to "スキー場情報", resort_url(resort) %> をご確認ください！</p>
 <% end %>
 
 <hr>

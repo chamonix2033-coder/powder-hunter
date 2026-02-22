@@ -54,6 +54,6 @@ class Admin::SkiResortsController < ApplicationController
   end
 
   def ski_resort_params
-    params.require(:ski_resort).permit(:name_en, :name_ja, :latitude, :longitude, :elevation_base, :elevation_top, :last_powder_index, :cached_powder_index)
+    params.require(:ski_resort).permit(:name_en, :name_ja, :latitude, :longitude, :elevation_base, :elevation_top, :last_powder_index, :cached_powder_index, :last_powder_date)
   end
 end

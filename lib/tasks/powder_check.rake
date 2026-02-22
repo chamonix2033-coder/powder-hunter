@@ -1,9 +1,9 @@
 namespace :powder do
-  desc "Check powder forecasts and notify users if conditions improved from 0"
+  desc "Check powder forecasts and notify users if conditions changed"
   task check: :environment do
     puts "Starting daily powder check at #{Time.current}..."
 
-    improved_resorts_data = []
+    notify_resorts_data = []
 
     all_resorts = SkiResort.all
     forecasts = OpenMeteoService.fetch_all_forecasts(all_resorts) || {}
@@ -20,6 +20,7 @@ namespace :powder do
       # Determine if there's a powder day in the 14-day window
       next_powder_day = nil
       current_powder_index = 0
+      current_powder_date = nil
 
       # Check for today/tomorrow first
       today_snow = snowfall_array[0] || 0
@@ -43,35 +44,55 @@ namespace :powder do
             index: d_pow
           }
           current_powder_index = d_pow
+          current_powder_date = date_obj
           break
         end
       end
 
       resort_display_name = resort.name_ja.presence || resort.name_en
-      puts "Resort: #{resort_display_name} | Current Index: #{current_powder_index} | Last Index: #{resort.last_powder_index}"
-
-      # Condition to notify: Today index is > 0 AND Yesterday index was <= 0
       last_val = resort.last_powder_index || 0
+      last_date = resort.last_powder_date
+
+      puts "Resort: #{resort_display_name} | Current Index: #{current_powder_index} (#{current_powder_date}) | Last Index: #{last_val} (#{last_date})"
+
+      # Determine notification reason
+      reason = nil
       if current_powder_index > 0 && last_val <= 0
-        improved_resorts_data << {
+        # New powder chance (was 0, now > 0)
+        reason = :new
+      elsif current_powder_index > 0 && last_val > 0 && current_powder_date && last_date
+        if current_powder_date < last_date
+          reason = :earlier
+        elsif current_powder_date > last_date
+          reason = :later
+        end
+      end
+
+      if reason
+        notify_resorts_data << {
           resort: resort,
           date: next_powder_day[:date],
-          index: current_powder_index
+          index: current_powder_index,
+          reason: reason,
+          last_date_str: last_date ? "#{last_date.month}月#{last_date.day}日" : nil
         }
+        puts "  -> Notification reason: #{reason}"
       end
 
       # ALWAYS persist today's evaluation into the DB for tomorrow's verification
-      # Also cache today's powder index for fast map loading
-      resort.update!(last_powder_index: current_powder_index, cached_powder_index: today_powder_index)
+      resort.update!(
+        last_powder_index: current_powder_index,
+        cached_powder_index: today_powder_index,
+        last_powder_date: current_powder_date
+      )
     end
 
     # Process Grouped Emails
-    if improved_resorts_data.any?
+    if notify_resorts_data.any?
       puts "Processing email deliveries for users..."
       User.find_each do |user|
-        # Only email users about resorts they have specifically selected
         user_resort_ids = user.ski_resorts.pluck(:id)
-        matching_data = improved_resorts_data.select do |data|
+        matching_data = notify_resorts_data.select do |data|
           user_resort_ids.include?(data[:resort].id)
         end
 

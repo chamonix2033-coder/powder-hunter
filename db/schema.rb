@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_20_082913) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_22_042552) do
   create_table "selections", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "ski_resort_id", null: false
@@ -25,6 +25,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_082913) do
     t.datetime "created_at", null: false
     t.float "elevation_base"
     t.float "elevation_top"
+    t.date "last_powder_date"
     t.integer "last_powder_index"
     t.float "latitude"
     t.float "longitude"

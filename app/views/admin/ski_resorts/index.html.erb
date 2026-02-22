@@ -19,6 +19,7 @@
           <th style="padding: 12px; text-align: left;">英語名</th>
           <th style="padding: 12px; text-align: center;">Current Index</th>
           <th style="padding: 12px; text-align: center;">Last Index</th>
+          <th style="padding: 12px; text-align: center;">Last Date</th>
           <th style="padding: 12px; text-align: left;">緯度 / 経度</th>
           <th style="padding: 12px; text-align: left;">標高 (Base/Top)</th>
           <th style="padding: 12px; text-align: center;">操作</th>
@@ -40,6 +41,9 @@
               <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-weight: bold; color: white; background-color: <%= last_idx > 50 ? '#27ae60' : (last_idx > 0 ? '#3498db' : '#bdc3c7') %>;">
                 <%= last_idx %>
               </span>
+            </td>
+            <td style="padding: 12px; text-align: center; color: #7f8c8d;">
+              <%= resort.last_powder_date ? "#{resort.last_powder_date.month}月#{resort.last_powder_date.day}日" : "—" %>
             </td>
             <td style="padding: 12px;"><%= resort.latitude %> / <%= resort.longitude %></td>
             <td style="padding: 12px;"><%= resort.elevation_base %>m / <%= resort.elevation_top %>m</td>
