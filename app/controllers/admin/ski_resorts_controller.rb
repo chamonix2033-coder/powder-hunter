@@ -36,6 +36,11 @@ class Admin::SkiResortsController < ApplicationController
     redirect_to admin_ski_resorts_path, notice: "スキー場を削除しました。"
   end
 
+  def reset_all_indices
+    SkiResort.update_all(last_powder_index: 0)
+    redirect_to admin_ski_resorts_path, notice: "全スキー場の Last Index を0にリセットしました。"
+  end
+
   private
 
   def require_admin!
@@ -49,6 +54,6 @@ class Admin::SkiResortsController < ApplicationController
   end
 
   def ski_resort_params
-    params.require(:ski_resort).permit(:name_en, :name_ja, :latitude, :longitude, :elevation_base, :elevation_top)
+    params.require(:ski_resort).permit(:name_en, :name_ja, :latitude, :longitude, :elevation_base, :elevation_top, :last_powder_index, :cached_powder_index)
   end
 end

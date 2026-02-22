@@ -10,7 +10,7 @@ Powder Hunterからの最新のパウダー情報です！
 【スキー場】 <%= resort_name %>
 【パウダー到来日】 <%= data[:date] %>
 【パウダー指数】 <%= data[:index] %> / 100
-詳細: http://localhost:3000/resorts/<%= resort.id %>
+詳細: <%= resort_url(resort) %>
 <% end %>
 --------------------------------------------------
 

@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   resources :resorts, only: [ :index, :show ]
 
   namespace :admin do
-    resources :ski_resorts
+    resources :ski_resorts do
+      collection do
+        post :reset_all_indices
+      end
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

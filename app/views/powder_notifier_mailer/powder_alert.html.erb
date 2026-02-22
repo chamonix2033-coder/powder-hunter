@@ -12,7 +12,7 @@
     <li><strong>パウダー到来日:</strong> <%= data[:date] %></li>
     <li><strong>パウダー指数:</strong> <%= data[:index] %> / 100</li>
   </ul>
-  <p>詳細は <%= link_to 'スキー場情報', "http://localhost:3000/resorts/#{resort.id}" %> をご確認ください！</p>
+  <p>詳細は <%= link_to 'スキー場情報', resort_url(resort) %> をご確認ください！</p>
 <% end %>
 
 <hr>
