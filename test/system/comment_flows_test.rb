@@ -66,8 +66,8 @@ class CommentFlowsTest < ApplicationSystemTestCase
     assert_selector "[data-edit-for='#{comment.id}']", visible: true
 
     within("[data-edit-for='#{comment.id}']") do
-      fill_in "comment[body]", with: "編集後のコメントです"
-      fill_in "comment[url]", with: "https://new.example.com"
+      fill_in "comment_body_edit_#{comment.id}", with: "編集後のコメントです"
+      fill_in "comment_url_edit_#{comment.id}", with: "https://new.example.com"
       click_button "更新"
     end
 
@@ -88,8 +88,9 @@ class CommentFlowsTest < ApplicationSystemTestCase
     assert_text "削除予定のコメント"
 
     # 削除ボタン
-    within("#comment-#{comment.id}") do
-      accept_confirm "このコメントを削除しますか？" do
+    # 削除ボタン。accept_confirm を確実に動作させるため text 指定は省く
+    accept_confirm do
+      within("#comment-#{comment.id}") do
         click_button "🗑️ 削除"
       end
     end

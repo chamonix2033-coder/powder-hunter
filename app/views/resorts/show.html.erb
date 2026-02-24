@@ -220,9 +220,9 @@
             <div class="comment-actions">
               <button type="button" class="btn-edit" onclick="toggleEdit(<%= comment.id %>)">✏️ 編集</button>
               <%= button_to "🗑️ 削除", resort_comment_path(@resort, comment), method: :delete,
-                  data: { turbo: false },
+                  data: { turbo_confirm: "このコメントを削除しますか？" },
                   class: "btn-delete",
-                  form: { style: "display: inline-block;", onsubmit: "return confirm('このコメントを削除しますか？');" } %>
+                  form: { style: "display: inline-block;" } %>
             </div>
           <% end %>
         </div>
@@ -232,17 +232,17 @@
           <div class="comment-edit" data-edit-for="<%= comment.id %>" style="display: none;">
             <%= form_with(model: comment, url: resort_comment_path(@resort, comment), method: :patch, data: { turbo: false }, local: true) do |f| %>
               <div style="margin-bottom: 10px;">
-                <%= f.text_area :body, rows: 3, maxlength: 256, class: "comment-input",
+                <%= f.text_area :body, id: "comment_body_edit_#{comment.id}", rows: 3, maxlength: 256, class: "comment-input",
                     style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; resize: vertical; font-family: inherit;",
                     oninput: "updateCounter(this, 'edit-counter-#{comment.id}')" %>
                 <small id="edit-counter-<%= comment.id %>" style="color: #999;"><%= comment.body.length %>/256</small>
               </div>
               <div style="margin-bottom: 10px;">
-                <%= f.text_field :url, placeholder: "https://example.com（任意）", class: "comment-input",
+                <%= f.text_field :url, id: "comment_url_edit_#{comment.id}", placeholder: "https://example.com（任意）", class: "comment-input",
                     style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit;" %>
               </div>
               <div>
-                <%= f.submit "更新", class: "btn-submit" %>
+                <%= f.submit "更新", class: "btn-submit btn-update-comment" %>
                 <button type="button" class="btn-cancel" onclick="toggleEdit(<%= comment.id %>)">キャンセル</button>
               </div>
             <% end %>
