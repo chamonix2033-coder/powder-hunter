@@ -111,16 +111,15 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
   # Test 5: User can view resort details page (14-day table)
   # ---------------------------------------------------------
   test "user can view resort details page" do
-    visit resorts_url
+    visit resort_url(@resort1)
 
-    click_on @resort1.name_ja
     assert_text @resort1.name_ja
     assert_selector "table"
     assert_text "14-Day Powder Forecast"
     assert_text "Powder Index"
 
     # Back to resorts list
-    click_on "戻る"
+    visit resorts_url
     assert_text "Powder Hunter"
   end
 
