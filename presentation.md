@@ -126,6 +126,21 @@ Powder Hunter
 
 ---
 
+## ページ8：機能⑤ コメント機能
+
+**【見出し】**
+ユーザー同士で情報交換！コメント機能
+
+**【本文】**
+* **現場の声を共有**: 実際に滑ったユーザーの生の声を確認
+* **URL連携**: YAMAP等の外部記録へリンク
+* 自分の投稿はいつでも編集・削除可能
+
+**【画像挿入】**
+![コメント機能のイメージ](file:///Users/yasuhiro/.gemini/antigravity/brain/7f8a2b79-6248-4d8f-89d4-8ebd29facd45/guide_comment_section_1771938696240.png)
+
+---
+
 ## カルーセル表示版（プレビュー用）
 
 ````carousel
@@ -185,4 +200,12 @@ Powder Hunter
 > 【パウダー到来日】 2月28日
 > 【パウダー指数】 35 / 100
 > ...
+<!-- slide -->
+# 機能⑤ コメント機能
+
+* **現場の声を共有**: 実際に滑ったユーザーの生の声を確認
+* **URL連携**: YAMAP等の外部記録へリンク
+* 自分の投稿はいつでも編集・削除可能
+
+![コメント機能のイメージ](file:///Users/yasuhiro/.gemini/antigravity/brain/7f8a2b79-6248-4d8f-89d4-8ebd29facd45/guide_comment_section_1771938696240.png)
 ````
