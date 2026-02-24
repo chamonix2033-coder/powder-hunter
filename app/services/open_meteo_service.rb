@@ -49,11 +49,13 @@ class OpenMeteoService
           end
           forecasts_by_resort_id
         else
-          Rails.logger.error("OpenMeteo API error: #{response.code} - #{response.body}")
+          Rails.logger.error("OpenMeteo API error! Code: #{response.code}, URI: #{uri}")
+          Rails.logger.error("Response body: #{response.body}")
           nil
         end
       rescue StandardError => e
-        Rails.logger.error("Error fetching batch OpenMeteo data: #{e.message}")
+        Rails.logger.error("Critical error fetching OpenMeteo data: #{e.class} - #{e.message}")
+        Rails.logger.error("URI attempted: #{uri}")
         nil
       end
     end

@@ -1,114 +1,160 @@
 <% content_for :title, "Powder Hunter - Backcountry Ski Resorts" %>
 
-<style>
-  body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
-    margin: 0;
-    padding: 0;
-  }
-  header {
-    background-color: #2c3e50;
-    color: #fff;
-    padding: 20px 0;
-    text-content: center;
-    text-align: center;
-  }
-  h1 {
-    margin: 0;
-    font-size: 2.5em;
-    letter-spacing: 1px;
-  }
-  p.subtitle {
-    font-style: italic;
-    margin-top: 10px;
-    color: #bdc3c7;
-  }
-  .container {
-    width: 80%;
-    margin: 40px auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  .resort-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    width: 30%;
-    margin-bottom: 30px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-  }
-  .resort-card:hover {
-    transform: translateY(-5px);
-  }
-  .resort-image {
-    height: 200px;
-    background-color: #ecf0f1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #7f8c8d;
-    font-size: 1.2em;
-  }
-  .resort-info {
-    padding: 20px;
-  }
-  .resort-name {
-    font-size: 1.5em;
-    margin: 0 0 10px 0;
-    color: #2980b9;
-  }
-  .resort-desc {
-    line-height: 1.6;
-    color: #555;
-  }
-  footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #2c3e50;
-    color: #7f8c8d;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
-  .route-btn {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 8px 15px;
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-  }
-  .route-btn:hover {
-    background-color: #2ecc71;
-  }
-
-  /* ===== Mobile Responsive ===== */
-  @media (max-width: 768px) {
-    h1 { font-size: 1.6em; }
-    p.subtitle { font-size: 0.85em; }
-    .container { width: 95%; margin: 20px auto; }
-    .resort-card { width: 100%; }
-    .resort-image { height: 120px; }
-    .resort-info { padding: 15px; }
-    .resort-name { font-size: 1.2em; }
-    .resort-desc { font-size: 0.9em; }
-    .route-btn { width: 100%; padding: 12px; font-size: 1em; }
-    header > div:first-child {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
+<% content_for :head do %>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      margin: 0;
+      padding: 0;
     }
-  }
-</style>
+    header {
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 20px 0;
+      text-content: center;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.5em;
+      letter-spacing: 1px;
+    }
+    p.subtitle {
+      font-style: italic;
+      margin-top: 10px;
+      color: #bdc3c7;
+    }
+    .container {
+      width: 80%;
+      margin: 40px auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+    .resort-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 30%;
+      margin-bottom: 30px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .resort-card:hover {
+      transform: translateY(-5px);
+    }
+    .resort-image {
+      height: 200px;
+      background-color: #ecf0f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7f8c8d;
+      font-size: 1.2em;
+    }
+    .resort-info {
+      padding: 20px;
+    }
+    .resort-name {
+      font-size: 1.5em;
+      margin: 0 0 10px 0;
+      color: #2980b9;
+    }
+    .resort-desc {
+      line-height: 1.6;
+      color: #555;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #2c3e50;
+      color: #7f8c8d;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .route-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 8px 15px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background-color 0.3s ease;
+    }
+    .route-btn:hover {
+      background-color: #2ecc71;
+    }
+
+    /* ===== Mobile Responsive ===== */
+    @media (max-width: 768px) {
+      h1 { font-size: 1.6em; }
+      p.subtitle { font-size: 0.85em; }
+      .container { width: 95%; margin: 20px auto; }
+      .resort-card { width: 100%; }
+      .resort-image { height: 120px; }
+      .resort-info { padding: 15px; }
+      .resort-name { font-size: 1.2em; }
+      .resort-desc { font-size: 0.9em; }
+      .route-btn { width: 100%; padding: 12px; font-size: 1em; }
+      header > div:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const routeButtons = document.querySelectorAll(".route-btn");
+      
+      routeButtons.forEach(button => {
+        button.addEventListener("click", (e) => {
+          e.preventDefault();
+          const destLat = button.dataset.lat;
+          const destLon = button.dataset.lon;
+          
+          if ("geolocation" in navigator) {
+            button.textContent = "現在地を取得中...";
+            button.disabled = true;
++
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const originLat = position.coords.latitude;
+                const originLon = position.coords.longitude;
+                
+                // Google Maps Universal URL
+                const url = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLon}&destination=${destLat},${destLon}&travelmode=driving`;
+                window.open(url, "_blank");
+                
+                // Reset button
+                button.textContent = "🚗 ここへのルートを表示";
+                button.disabled = false;
+              },
+              (error) => {
+                console.error("Error getting location: ", error);
+                alert("現在地の取得に失敗しました。位置情報の利用が許可されているか確認してください。");
+                
+                // Reset button
+                button.textContent = "🚗 ここへのルートを表示";
+                button.disabled = false;
+              }
+            );
+          } else {
+            alert("お使いのブラウザは位置情報の取得をサポートしていません。");
+          }
+        });
+      });
+    });
+  </script>
+<% end %>
 
 <header>
   <div style="text-align: right; padding-right: 20px; font-size: 0.9em; margin-bottom: 10px;">
@@ -185,47 +231,4 @@
   <% end %>
 </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const routeButtons = document.querySelectorAll(".route-btn");
-    
-    routeButtons.forEach(button => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        const destLat = button.dataset.lat;
-        const destLon = button.dataset.lon;
-        
-        if ("geolocation" in navigator) {
-          button.textContent = "現在地を取得中...";
-          button.disabled = true;
-
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const originLat = position.coords.latitude;
-              const originLon = position.coords.longitude;
-              
-              // Google Maps Universal URL
-              const url = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLon}&destination=${destLat},${destLon}&travelmode=driving`;
-              window.open(url, "_blank");
-              
-              // Reset button
-              button.textContent = "🚗 ここへのルートを表示";
-              button.disabled = false;
-            },
-            (error) => {
-              console.error("Error getting location: ", error);
-              alert("現在地の取得に失敗しました。位置情報の利用が許可されているか確認してください。");
-              
-              // Reset button
-              button.textContent = "🚗 ここへのルートを表示";
-              button.disabled = false;
-            }
-          );
-        } else {
-          alert("お使いのブラウザは位置情報の取得をサポートしていません。");
-        }
-      });
-    });
-  });
-</script>
 

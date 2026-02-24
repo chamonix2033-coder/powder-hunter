@@ -1,131 +1,153 @@
 <% content_for :title, "#{@resort.name_ja.presence || @resort.name_en} - Powder Hunter" %>
 
-<style>
-  body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
-    margin: 0;
-    padding: 0;
-  }
-  header {
-    background-color: #2c3e50;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-  }
-  h1 {
-    margin: 0;
-    font-size: 2.5em;
-  }
-  .back-link {
-    display: inline-block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  .back-link:hover {
-    background-color: #2980b9;
-  }
-  .container {
-    width: 80%;
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-  }
-  th {
-    background-color: #ecf0f1;
-    color: #2c3e50;
-    font-weight: bold;
-  }
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  tr:hover {
-    background-color: #f1f1f1;
-  }
-  .high-powder {
-    background-color: #d1ecf1 !important;
-    font-weight: bold;
-    color: #0c5460;
-  }
+<% content_for :head do %>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+    .back-link {
+      display: inline-block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .back-link:hover {
+      background-color: #2980b9;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .high-powder {
+      background-color: #d1ecf1 !important;
+      font-weight: bold;
+      color: #0c5460;
+    }
 
-  /* ===== Mobile Responsive ===== */
-  @media (max-width: 768px) {
-    h1 { font-size: 1.5em; }
-    header p { font-size: 0.85em; }
-    .container { width: 95%; padding: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    th, td { padding: 8px 6px; font-size: 0.8em; white-space: nowrap; }
-    h2 { font-size: 1.2em; }
-    .back-link { padding: 8px 15px; font-size: 0.9em; }
-  }
+    /* ===== Mobile Responsive ===== */
+    @media (max-width: 768px) {
+      h1 { font-size: 1.5em; }
+      header p { font-size: 0.85em; }
+      .container { width: 95%; padding: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      th, td { padding: 8px 6px; font-size: 0.8em; white-space: nowrap; }
+      h2 { font-size: 1.2em; }
+      .back-link { padding: 8px 15px; font-size: 0.9em; }
+    }
 
-  .comment-card {
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 12px;
-    text-align: left;
-  }
-  .comment-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 0.85em;
-    color: #888;
-  }
-  .comment-author { font-weight: bold; color: #555; }
-  .comment-date { font-style: italic; }
-  .comment-body { margin: 0 0 8px 0; line-height: 1.6; color: #333; word-break: break-word; }
-  .comment-url { margin: 0; font-size: 0.9em; }
-  .comment-url a { color: #2980b9; text-decoration: underline; }
-  .comment-url a:hover { color: #1a5276; }
-  .comment-actions { margin-top: 10px; display: flex; gap: 8px; }
-  .btn-edit, .btn-delete, .btn-submit, .btn-cancel {
-    padding: 6px 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85em;
-    font-family: inherit;
-    transition: background-color 0.3s ease;
-  }
-  .btn-edit { background-color: #f39c12; color: white; }
-  .btn-edit:hover { background-color: #e67e22; }
-  .btn-delete { background-color: #e74c3c; color: white; }
-  .btn-delete:hover { background-color: #c0392b; }
-  .btn-submit { background-color: #27ae60; color: white; padding: 10px 25px; font-size: 1em; }
-  .btn-submit:hover { background-color: #2ecc71; }
-  .btn-cancel { background-color: #95a5a6; color: white; }
-  .btn-cancel:hover { background-color: #7f8c8d; }
-  .comment-form-section {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 2px solid #ecf0f1;
-    text-align: left;
-  }
-  .comment-form-section h3 { color: #2c3e50; margin-bottom: 15px; }
-</style>
+    .comment-card {
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.85em;
+      color: #888;
+    }
+    .comment-author { font-weight: bold; color: #555; }
+    .comment-date { font-style: italic; }
+    .comment-body { margin: 0 0 8px 0; line-height: 1.6; color: #333; word-break: break-word; }
+    .comment-url { margin: 0; font-size: 0.9em; }
+    .comment-url a { color: #2980b9; text-decoration: underline; }
+    .comment-url a:hover { color: #1a5276; }
+    .comment-actions { margin-top: 10px; display: flex; gap: 8px; }
+    .btn-edit, .btn-delete, .btn-submit, .btn-cancel {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+      font-family: inherit;
+      transition: background-color 0.3s ease;
+    }
+    .btn-edit { background-color: #f39c12; color: white; }
+    .btn-edit:hover { background-color: #e67e22; }
+    .btn-delete { background-color: #e74c3c; color: white; }
+    .btn-delete:hover { background-color: #c0392b; }
+    .btn-submit { background-color: #27ae60; color: white; padding: 10px 25px; font-size: 1em; }
+    .btn-submit:hover { background-color: #2ecc71; }
+    .btn-cancel { background-color: #95a5a6; color: white; }
+    .btn-cancel:hover { background-color: #7f8c8d; }
+    .comment-form-section {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 2px solid #ecf0f1;
+      text-align: left;
+    }
+    .comment-form-section h3 { color: #2c3e50; margin-bottom: 15px; }
+  </style>
+
+  <script>
+    function toggleEdit(commentId) {
+      const display = document.querySelector(`[data-display-for="${commentId}"]`);
+      const edit = document.querySelector(`[data-edit-for="${commentId}"]`);
+      if (display && edit) {
+        const isEditing = edit.style.display !== 'none';
+        display.style.display = isEditing ? 'block' : 'none';
+        edit.style.display = isEditing ? 'none' : 'block';
+      }
+    }
+
+    function updateCounter(textarea, counterId) {
+      const counter = document.getElementById(counterId);
+      if (counter) {
+        counter.textContent = `${textarea.value.length}/256`;
+        counter.style.color = textarea.value.length > 240 ? '#e74c3c' : '#999';
+      }
+    }
+  </script>
+<% end %>
 
 <header>
   <h1><%= @resort.name_ja.presence || @resort.name_en %></h1>
@@ -261,24 +283,5 @@
   <% end %>
 </div>
 
-<script>
-  function toggleEdit(commentId) {
-    const display = document.querySelector(`[data-display-for="${commentId}"]`);
-    const edit = document.querySelector(`[data-edit-for="${commentId}"]`);
-    if (display && edit) {
-      const isEditing = edit.style.display !== 'none';
-      display.style.display = isEditing ? 'block' : 'none';
-      edit.style.display = isEditing ? 'none' : 'block';
-    }
-  }
-
-  function updateCounter(textarea, counterId) {
-    const counter = document.getElementById(counterId);
-    if (counter) {
-      counter.textContent = `${textarea.value.length}/256`;
-      counter.style.color = textarea.value.length > 240 ? '#e74c3c' : '#999';
-    }
-  }
-</script>
 
 
