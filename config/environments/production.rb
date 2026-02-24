@@ -56,7 +56,9 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: ENV.fetch("RENDER_EXTERNAL_URL", "example.com") }
+  render_url = ENV.fetch("RENDER_EXTERNAL_URL", "https://powder-hunter-web.onrender.com")
+  render_uri = URI.parse(render_url)
+  config.action_mailer.default_url_options = { host: render_uri.host, protocol: render_uri.scheme }
 
   # Specify outgoing SMTP server.
   config.action_mailer.delivery_method = :smtp
