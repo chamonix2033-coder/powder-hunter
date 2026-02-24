@@ -1,24 +1,65 @@
-# README
+# 🏔️ Powder Hunter
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Powder Hunter（パウダーハンター）は、最高のパウダースノーに出会うためのバックカントリー愛好家向けウェブアプリケーションです。
+精度の高い14日間の天気予報データから、独自のアルゴリズムで「パウダー指数」を算出し、パウダー雪が期待できる最高の日を自動で検出してメールでお知らせします。
 
-Things you may want to cover:
+## ✨ 主な機能
 
-* Ruby version
+* **パウダー指数の算出とダッシュボード表示**: Open-Meteo APIを利用し、降雪量と気温から独自のパウダー指数（0〜100点）を算出して見やすく表示します。直近のパウダーチャンスが一目でわかります。
+* **インタラクティブなマップ選定**: 日本全国14箇所の有名バックカントリー・スキーリゾートエリアを地図上で確認できます。
+* **お気に入りエリア登録**: 行きたいスキー場を最大3つまで選択・登録できます。
+* **自動メールアラート**: 毎朝バッチ処理が自動で予報をチェックし、登録したお気に入りスキー場に「パウダーチャンス」が新たに追加された際や、日付が早まった状況の時にメールで通知します。
 
-* System dependencies
+## 🛠️ 技術スタック
 
-* Configuration
+* **バックエンド**: Ruby on Rails (v8.1.x)
+* **言語**: Ruby (v4.0.1)
+* **データベース**: SQLite (開発環境) / PostgreSQL (本番展開想定)
+* **フロントエンド**: HTML, CSS, JavaScript (Hotwire / Stimulus, Leaflet.jsを利用したマップ描画)
+* **外部API**: Open-Meteo API (気象予報データ取得)
+* **インフラ/デプロイ構成**: Render.com 用の設定 (`render.yaml`) および `Dockerfile` を同梱
 
-* Database creation
+## 🚀 ローカル開発環境のセットアップ
 
-* Database initialization
+手元の環境でアプリケーションを動かすための手順です。
 
-* How to run the test suite
+### 前提条件
+* Ruby 4.0.1
+* Bundler
 
-* Services (job queues, cache servers, search engines, etc.)
+### インストール手順
 
-* Deployment instructions
+1. 依存ライブラリ（Gem）のインストール
+   ```bash
+   bundle install
+   ```
 
-* ...
+2. データベースのセットアップ（作成、マイグレーション、初期シードデータの投入）
+   ```bash
+   bin/rails db:setup
+   ```
+   ※シードデータ（`db/seeds.rb`）により、14箇所のスキー場基本データ（名前、緯度経度など）がデータベースに投入されます。
+
+3. サーバーの起動
+   ```bash
+   bin/rails server
+   ```
+   起動後、ブラウザで `http://localhost:3000` にアクセスしてください。
+
+## 📧 パウダー予報チェック（メール送信）の実行方法
+
+Powder Hunterのコア機能である「最新のパウダー予報のチェックおよびユーザーへのアラート通知」は、Rakeタスクとして実装されています。
+ローカルで動作確認を行う場合は、サーバーを起動した上で（または別タブで）以下のコマンドを実行します。
+
+```bash
+bin/rails powder:check
+```
+※ 実際の運用環境では、このタスクがスケジュール実行（cron等）により毎日定期的に走る仕組みになっています。
+
+## ⚙️ 環境変数 (Environment Variables)
+
+本番環境の構築や、ローカルで実際にメールを送信するテストを行う場合は、以下の環境変数を設定してください。
+
+* `GMAIL_USERNAME` : アラート通知送信元のGmailアドレス
+* `GMAIL_APP_PASSWORD` : 上記Gmailのアプリパスワード（2段階認証用）
+* `DATABASE_URL` : (本番環境用) PostgreSQLなどの接続URL
