@@ -78,3 +78,5 @@ gem "devise", "~> 5.0"
 gem "whenever", "~> 1.1"
 
 gem "dotenv-rails", "~> 3.2", groups: [ :development, :test ]
+
+gem "ruby-lsp", "~> 0.26.7", group: :development

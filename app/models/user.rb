@@ -6,4 +6,5 @@ class User < ApplicationRecord
 
   has_many :selections, dependent: :destroy
   has_many :ski_resorts, through: :selections
+  has_many :comments, dependent: :destroy
 end

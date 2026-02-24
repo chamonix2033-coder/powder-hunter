@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_22_042552) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_24_102917) do
+  create_table "comments", force: :cascade do |t|
+    t.string "body", null: false
+    t.datetime "created_at", null: false
+    t.integer "ski_resort_id", null: false
+    t.datetime "updated_at", null: false
+    t.string "url"
+    t.integer "user_id", null: false
+    t.index ["ski_resort_id"], name: "index_comments_on_ski_resort_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "selections", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "ski_resort_id", null: false
@@ -47,6 +58,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_22_042552) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "comments", "ski_resorts"
+  add_foreign_key "comments", "users"
   add_foreign_key "selections", "ski_resorts"
   add_foreign_key "selections", "users"
 end

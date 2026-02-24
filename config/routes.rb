@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   resources :selections, only: [ :index, :create, :destroy ]
   devise_for :users
-  resources :resorts, only: [ :index, :show ]
+  resources :resorts, only: [ :index, :show ] do
+    resources :comments, only: [ :create, :update, :destroy ]
+  end
 
   namespace :admin do
     resources :ski_resorts do

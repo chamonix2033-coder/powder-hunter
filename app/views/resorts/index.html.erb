@@ -1,237 +1,231 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Powder Hunter - Backcountry Ski Resorts</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f4f7f6;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #2c3e50;
-      color: #fff;
-      padding: 20px 0;
-      text-content: center;
-      text-align: center;
-    }
-    h1 {
-      margin: 0;
-      font-size: 2.5em;
-      letter-spacing: 1px;
-    }
-    p.subtitle {
-      font-style: italic;
-      margin-top: 10px;
-      color: #bdc3c7;
-    }
-    .container {
-      width: 80%;
-      margin: 40px auto;
+<% content_for :title, "Powder Hunter - Backcountry Ski Resorts" %>
+
+<style>
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 20px 0;
+    text-content: center;
+    text-align: center;
+  }
+  h1 {
+    margin: 0;
+    font-size: 2.5em;
+    letter-spacing: 1px;
+  }
+  p.subtitle {
+    font-style: italic;
+    margin-top: 10px;
+    color: #bdc3c7;
+  }
+  .container {
+    width: 80%;
+    margin: 40px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .resort-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 30%;
+    margin-bottom: 30px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  .resort-card:hover {
+    transform: translateY(-5px);
+  }
+  .resort-image {
+    height: 200px;
+    background-color: #ecf0f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7f8c8d;
+    font-size: 1.2em;
+  }
+  .resort-info {
+    padding: 20px;
+  }
+  .resort-name {
+    font-size: 1.5em;
+    margin: 0 0 10px 0;
+    color: #2980b9;
+  }
+  .resort-desc {
+    line-height: 1.6;
+    color: #555;
+  }
+  footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #2c3e50;
+    color: #7f8c8d;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  .route-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 15px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+  }
+  .route-btn:hover {
+    background-color: #2ecc71;
+  }
+
+  /* ===== Mobile Responsive ===== */
+  @media (max-width: 768px) {
+    h1 { font-size: 1.6em; }
+    p.subtitle { font-size: 0.85em; }
+    .container { width: 95%; margin: 20px auto; }
+    .resort-card { width: 100%; }
+    .resort-image { height: 120px; }
+    .resort-info { padding: 15px; }
+    .resort-name { font-size: 1.2em; }
+    .resort-desc { font-size: 0.9em; }
+    .route-btn { width: 100%; padding: 12px; font-size: 1em; }
+    header > div:first-child {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
     }
-    .resort-card {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      width: 30%;
-      margin-bottom: 30px;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-    .resort-card:hover {
-      transform: translateY(-5px);
-    }
-    .resort-image {
-      height: 200px;
-      background-color: #ecf0f1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #7f8c8d;
-      font-size: 1.2em;
-    }
-    .resort-info {
-      padding: 20px;
-    }
-    .resort-name {
-      font-size: 1.5em;
-      margin: 0 0 10px 0;
-      color: #2980b9;
-    }
-    .resort-desc {
-      line-height: 1.6;
-      color: #555;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #2c3e50;
-      color: #7f8c8d;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-    .route-btn {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 8px 15px;
-      background-color: #27ae60;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9em;
-      transition: background-color 0.3s ease;
-    }
-    .route-btn:hover {
-      background-color: #2ecc71;
-    }
+  }
+</style>
 
-    /* ===== Mobile Responsive ===== */
-    @media (max-width: 768px) {
-      h1 { font-size: 1.6em; }
-      p.subtitle { font-size: 0.85em; }
-      .container { width: 95%; margin: 20px auto; }
-      .resort-card { width: 100%; }
-      .resort-image { height: 120px; }
-      .resort-info { padding: 15px; }
-      .resort-name { font-size: 1.2em; }
-      .resort-desc { font-size: 0.9em; }
-      .route-btn { width: 100%; padding: 12px; font-size: 1em; }
-      header > div:first-child {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div style="text-align: right; padding-right: 20px; font-size: 0.9em; margin-bottom: 10px;">
-      <% if current_user&.admin? %>
-        <%= link_to '管理画面', admin_ski_resorts_path, style: "color: #f1c40f; font-weight: bold; margin-right: 15px; text-decoration: underline;" %>
-      <% end %>
-
-      <% if user_signed_in? %>
-        <%= link_to '表示するスキー場を編集する', selections_path, style: "color: #f39c12; font-weight: bold; margin-right: 15px; text-decoration: underline;", data: { turbo: false } %>
-        <%= current_user.email %> さん | 
-        <%= button_to 'ログアウト', destroy_user_session_path, method: :delete, data: { turbo: false }, form: { style: "display: inline-block; margin: 0;", data: { turbo: false } }, style: "background: none; border: none; padding: 0; color: #ecf0f1; text-decoration: underline; cursor: pointer; font-family: inherit; font-size: inherit;" %>
-      <% else %>
-        <%= link_to 'トップページ', root_path, style: "color: #f39c12; font-weight: bold; margin-right: 15px; text-decoration: underline;" %>
-        <%= link_to '新規登録', new_user_registration_path, style: "color: #ecf0f1; text-decoration: underline;" %> | 
-        <%= link_to 'ログイン', new_user_session_path, style: "color: #ecf0f1; text-decoration: underline;" %>
-      <% end %>
-    </div>
-    <h1>Powder Hunter</h1>
-    <p class="subtitle">Find the best backcountry powder snow courses 2 weeks ahead (Coming Soon!)</p>
-  </header>
-
-  <div class="container" style="width: 80%; margin: 0 auto;">
-    <% if notice %>
-      <div style="text-align: center; padding: 15px; margin: 20px 0; background-color: #e8f8f5; color: #27ae60; font-weight: bold; border-radius: 8px;"><%= notice %></div>
+<header>
+  <div style="text-align: right; padding-right: 20px; font-size: 0.9em; margin-bottom: 10px;">
+    <% if current_user&.admin? %>
+      <%= link_to '管理画面', admin_ski_resorts_path, style: "color: #f1c40f; font-weight: bold; margin-right: 15px; text-decoration: underline;" %>
     <% end %>
-    <% if alert %>
-      <div style="text-align: center; padding: 15px; margin: 20px 0; background-color: #fdf2e9; color: #e74c3c; font-weight: bold; border-radius: 8px;"><%= alert %></div>
-    <% end %>
-  </div>
 
-  <div class="container">
-    <% if user_signed_in? && @api_data.empty? %>
-      <div style="text-align: center; padding: 50px; background-color: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px; width: 100%;">
-        <h2 style="color: #2c3e50; margin-bottom: 20px;">まだスキー場が選択されていません⛷️</h2>
-        <%= link_to 'こちらからスキー場を最大3つ選んでください', selections_path, style: "display: inline-block; padding: 15px 30px; background-color: #2980b9; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.1em;", data: { turbo: false } %>
-      </div>
+    <% if user_signed_in? %>
+      <%= link_to '表示するスキー場を編集する', selections_path, style: "color: #f39c12; font-weight: bold; margin-right: 15px; text-decoration: underline;", data: { turbo: false } %>
+      <%= current_user.email %> さん | 
+      <%= button_to 'ログアウト', destroy_user_session_path, method: :delete, data: { turbo: false }, form: { style: "display: inline-block; margin: 0;", data: { turbo: false } }, style: "background: none; border: none; padding: 0; color: #ecf0f1; text-decoration: underline; cursor: pointer; font-family: inherit; font-size: inherit;" %>
     <% else %>
-      <% @api_data.each do |data| %>
-        <div class="resort-card" data-testid="resort-card-<%= data[:resort].id %>">
-          <div class="resort-image">
-            <!-- Assign basic emoji depending on index -->
-            <% if data[:powder_index] > 50 %>
-              🏔️ POWDER!
-            <% elsif data[:powder_index] > 0 %>
-              ❄️ SNOWING
-            <% else %>
-              ⛄️
-            <% end %>
-          </div>
-          <div class="resort-info">
-            <h2 class="resort-name"><%= link_to data[:resort].name_ja.presence || data[:resort].name_en, resort_path(data[:resort]), style: "text-decoration: none; color: inherit;" %></h2>
-            <p class="resort-desc">
-              <strong>Powder Index: <%= data[:powder_index] %> / 100</strong><br>
-              Next 24h Snow: <%= data[:next_24h_snow] %> cm<br>
-              Expected Temp: <%= data[:temperature] %><br>
-              <br>
-              <% if data[:next_powder_day] %>
-                <strong style="color: #2980b9;">直近のチャンス: <%= data[:next_powder_day][:date] %> (指数: <%= data[:next_powder_day][:index] %>)</strong><br>
-              <% else %>
-                <strong style="color: #7f8c8d;">直近14日にパウダー予報はありません</strong><br>
-              <% end %>
-              <br>
-              <small>Elev: <%= data[:resort].elevation_base %>m | Lat: <%= data[:resort].latitude %> | Lon: <%= data[:resort].longitude %></small>
-            </p>
-            <button class="route-btn" 
-                    data-testid="route-btn-<%= data[:resort].id %>"
-                    data-lat="<%= data[:resort].latitude %>" 
-                    data-lon="<%= data[:resort].longitude %>">
-              🚗 ここへのルートを表示
-            </button>
-          </div>
-        </div>
-      <% end %>
+      <%= link_to 'トップページ', root_path, style: "color: #f39c12; font-weight: bold; margin-right: 15px; text-decoration: underline;" %>
+      <%= link_to '新規登録', new_user_registration_path, style: "color: #ecf0f1; text-decoration: underline;" %> | 
+      <%= link_to 'ログイン', new_user_session_path, style: "color: #ecf0f1; text-decoration: underline;" %>
     <% end %>
   </div>
+  <h1>Powder Hunter</h1>
+  <p class="subtitle">Find the best backcountry powder snow courses 2 weeks ahead (Coming Soon!)</p>
+</header>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const routeButtons = document.querySelectorAll(".route-btn");
-      
-      routeButtons.forEach(button => {
-        button.addEventListener("click", (e) => {
-          e.preventDefault();
-          const destLat = button.dataset.lat;
-          const destLon = button.dataset.lon;
-          
-          if ("geolocation" in navigator) {
-            button.textContent = "現在地を取得中...";
-            button.disabled = true;
+<div class="container" style="width: 80%; margin: 0 auto;">
+  <% if notice %>
+    <div style="text-align: center; padding: 15px; margin: 20px 0; background-color: #e8f8f5; color: #27ae60; font-weight: bold; border-radius: 8px;"><%= notice %></div>
+  <% end %>
+  <% if alert %>
+    <div style="text-align: center; padding: 15px; margin: 20px 0; background-color: #fdf2e9; color: #e74c3c; font-weight: bold; border-radius: 8px;"><%= alert %></div>
+  <% end %>
+</div>
 
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                const originLat = position.coords.latitude;
-                const originLon = position.coords.longitude;
-                
-                // Google Maps Universal URL
-                const url = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLon}&destination=${destLat},${destLon}&travelmode=driving`;
-                window.open(url, "_blank");
-                
-                // Reset button
-                button.textContent = "🚗 ここへのルートを表示";
-                button.disabled = false;
-              },
-              (error) => {
-                console.error("Error getting location: ", error);
-                alert("現在地の取得に失敗しました。位置情報の利用が許可されているか確認してください。");
-                
-                // Reset button
-                button.textContent = "🚗 ここへのルートを表示";
-                button.disabled = false;
-              }
-            );
-          } else {
-            alert("お使いのブラウザは位置情報の取得をサポートしていません。");
-          }
-        });
+<div class="container">
+  <% if user_signed_in? && @api_data.empty? %>
+    <div style="text-align: center; padding: 50px; background-color: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px; width: 100%;">
+      <h2 style="color: #2c3e50; margin-bottom: 20px;">まだスキー場が選択されていません⛷️</h2>
+      <%= link_to 'こちらからスキー場を最大3つ選んでください', selections_path, style: "display: inline-block; padding: 15px 30px; background-color: #2980b9; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.1em;", data: { turbo: false } %>
+    </div>
+  <% else %>
+    <% @api_data.each do |data| %>
+      <div class="resort-card" data-testid="resort-card-<%= data[:resort].id %>">
+        <div class="resort-image">
+          <!-- Assign basic emoji depending on index -->
+          <% if data[:powder_index] > 50 %>
+            🏔️ POWDER!
+          <% elsif data[:powder_index] > 0 %>
+            ❄️ SNOWING
+          <% else %>
+            ⛄️
+          <% end %>
+        </div>
+        <div class="resort-info">
+          <h2 class="resort-name"><%= link_to data[:resort].name_ja.presence || data[:resort].name_en, resort_path(data[:resort]), style: "text-decoration: none; color: inherit;" %></h2>
+          <p class="resort-desc">
+            <strong>Powder Index: <%= data[:powder_index] %> / 100</strong><br>
+            Next 24h Snow: <%= data[:next_24h_snow] %> cm<br>
+            Expected Temp: <%= data[:temperature] %><br>
+            <br>
+            <% if data[:next_powder_day] %>
+              <strong style="color: #2980b9;">直近のチャンス: <%= data[:next_powder_day][:date] %> (指数: <%= data[:next_powder_day][:index] %>)</strong><br>
+            <% else %>
+              <strong style="color: #7f8c8d;">直近14日にパウダー予報はありません</strong><br>
+            <% end %>
+            <br>
+            <small>Elev: <%= data[:resort].elevation_base %>m | Lat: <%= data[:resort].latitude %> | Lon: <%= data[:resort].longitude %></small>
+          </p>
+          <button class="route-btn" 
+                  data-testid="route-btn-<%= data[:resort].id %>"
+                  data-lat="<%= data[:resort].latitude %>" 
+                  data-lon="<%= data[:resort].longitude %>">
+            🚗 ここへのルートを表示
+          </button>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const routeButtons = document.querySelectorAll(".route-btn");
+    
+    routeButtons.forEach(button => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        const destLat = button.dataset.lat;
+        const destLon = button.dataset.lon;
+        
+        if ("geolocation" in navigator) {
+          button.textContent = "現在地を取得中...";
+          button.disabled = true;
+
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const originLat = position.coords.latitude;
+              const originLon = position.coords.longitude;
+              
+              // Google Maps Universal URL
+              const url = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLon}&destination=${destLat},${destLon}&travelmode=driving`;
+              window.open(url, "_blank");
+              
+              // Reset button
+              button.textContent = "🚗 ここへのルートを表示";
+              button.disabled = false;
+            },
+            (error) => {
+              console.error("Error getting location: ", error);
+              alert("現在地の取得に失敗しました。位置情報の利用が許可されているか確認してください。");
+              
+              // Reset button
+              button.textContent = "🚗 ここへのルートを表示";
+              button.disabled = false;
+            }
+          );
+        } else {
+          alert("お使いのブラウザは位置情報の取得をサポートしていません。");
+        }
       });
     });
-  </script>
-</body>
-</html>
+  });
+</script>
+
