@@ -15,7 +15,7 @@ class OpenMeteoService
   end
 
   def self.fetch_all_forecasts(resorts)
-    return {} if resorts.empty?
+    return { forecasts: {}, stale: false } if resorts.empty?
 
     forecasts_by_id = {}
     missing_resorts = []
@@ -33,7 +33,7 @@ class OpenMeteoService
     end
 
     # 全てキャッシュにあれば終了
-    return forecasts_by_id if missing_resorts.empty?
+    return { forecasts: forecasts_by_id, stale: false } if missing_resorts.empty?
 
     # 2. キャッシュにない分だけAPIリクエスト
     uri = URI(BASE_URL)
@@ -47,6 +47,8 @@ class OpenMeteoService
       forecast_days: 14
     }
     uri.query = URI.encode_www_form(params)
+
+    stale = false
 
     begin
       response = Net::HTTP.get_response(uri)
@@ -65,15 +67,17 @@ class OpenMeteoService
           end
         end
       else
-        Rails.logger.error("OpenMeteo API error! Code: #{response.code}, URI: #{uri}")
-        Rails.logger.error("Response body: #{response.body}")
-        # APIエラー時は現在取得できている分（キャッシュ分）だけ返す
+        # APIエラー（429レート制限等）: キャッシュ分で代替
+        Rails.logger.warn("OpenMeteo API error! Code: #{response.code}, URI: #{uri}")
+        Rails.logger.warn("Response body: #{response.body}")
+        stale = true
       end
     rescue StandardError => e
       Rails.logger.error("Critical error fetching OpenMeteo data: #{e.class} - #{e.message}")
       Rails.logger.error("URI attempted: #{uri}")
+      stale = true
     end
 
-    forecasts_by_id
+    { forecasts: forecasts_by_id, stale: stale }
   end
 end

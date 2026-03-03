@@ -6,7 +6,9 @@ class ResortsController < ApplicationController
       @resorts = SkiResort.all.order(name_ja: :asc)
     end
 
-    forecasts = OpenMeteoService.fetch_all_forecasts(@resorts) || {}
+    result = OpenMeteoService.fetch_all_forecasts(@resorts)
+    forecasts = result[:forecasts]
+    @api_stale = result[:stale]
 
     @api_data = @resorts.map do |resort|
       forecast = forecasts[resort.id]
@@ -70,7 +72,9 @@ class ResortsController < ApplicationController
 
   def show
     @resort = SkiResort.find(params[:id])
-    forecasts = OpenMeteoService.fetch_all_forecasts([ @resort ]) || {}
+    result = OpenMeteoService.fetch_all_forecasts([ @resort ])
+    forecasts = result[:forecasts]
+    @api_stale = result[:stale]
     forecast = forecasts[@resort.id]
 
     @daily_forecasts = []

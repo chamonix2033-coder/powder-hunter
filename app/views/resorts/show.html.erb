@@ -159,6 +159,15 @@
   
   <h2>14-Day Powder Forecast</h2>
 
+  <% if @api_stale %>
+    <div style="padding: 12px 20px; margin: 10px 0;
+                background-color: #fff3cd; color: #856404;
+                border: 1px solid #ffc107; border-radius: 8px;
+                font-weight: bold; text-align: center;">
+      ⚠️ 現在、最新の気象データを取得できませんでした。キャッシュされたデータを表示しています。
+    </div>
+  <% end %>
+
   <% if @daily_forecasts.any? %>
     <table>
       <thead>
