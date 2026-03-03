@@ -107,16 +107,17 @@ class CommentFlowsTest < ApplicationSystemTestCase
     visit resort_url(@resort1)
 
     long_body = "あ" * 257
-    # maxlength 除去と値のセットを1つのexecute_scriptにまとめる
-    # （別々にするとChrome 145でNodeのIDが無効になるエラーが発生する）
+    # maxlength除去・値セット・フォーム送信をJSで一括実行
+    # click_button経由だとChrome145でJS設定値がフォームに含まれない問題があるため
+    # requestSubmit() でフォームイベントを正しく発火させて送信する
     page.execute_script(<<~JS)
-      var el = document.querySelector('#comment_body');
-      el.removeAttribute('maxlength');
-      el.value = #{long_body.to_json};
-      el.dispatchEvent(new Event('input', { bubbles: true }));
-      el.dispatchEvent(new Event('change', { bubbles: true }));
+      (function() {
+        var el = document.querySelector('#comment_body');
+        el.removeAttribute('maxlength');
+        el.value = #{long_body.to_json};
+        el.form.requestSubmit();
+      })();
     JS
-    click_button "投稿する"
 
     assert_text "too long"
   end
