@@ -3,11 +3,13 @@ databases:
     databaseName: powder_hunter
     user: powder_hunter_user
     plan: free
+    region: singapore        # ← 追加
 
 services:
   - type: web
     name: powder-hunter-web
     env: ruby
+    region: singapore        # ← 追加
     buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
@@ -27,7 +29,8 @@ services:
   - type: cron
     name: powder-hunter-cron
     env: ruby
-    schedule: "0 0 * * *" # 毎日UTC 0:00 (日本時間 9:00) に実行
+    region: singapore        # ← 追加
+    schedule: "0 0 * * *"
     buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec rake powder:check"
     envVars:
