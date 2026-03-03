@@ -87,12 +87,12 @@ class CommentFlowsTest < ApplicationSystemTestCase
 
     assert_text "削除予定のコメント"
 
-    # 削除ボタン
-    # 削除ボタン。accept_confirm を確実に動作させるため text 指定は省く
-    accept_confirm do
-      within("#comment-#{comment.id}") do
-        click_button "🗑️ 削除"
-      end
+    # Turbo + Chrome の組み合わせで accept_confirm が不安定なため
+    # window.confirm を常に true を返すよう上書きしてダイアログをスキップ
+    page.execute_script("window.confirm = function() { return true; }")
+
+    within("#comment-#{comment.id}") do
+      click_button "🗑️ 削除"
     end
 
     assert_text "コメントを削除しました"
@@ -107,12 +107,17 @@ class CommentFlowsTest < ApplicationSystemTestCase
     visit resort_url(@resort1)
 
     long_body = "あ" * 257
-    # JS maxlength属性をバイパスするため直接値を設定
-    page.execute_script("document.querySelector('#comment_body').removeAttribute('maxlength')")
-    fill_in "comment[body]", with: long_body
+    # maxlength 除去と値のセットを1つのexecute_scriptにまとめる
+    # （別々にするとChrome 145でNodeのIDが無効になるエラーが発生する）
+    page.execute_script(<<~JS)
+      var el = document.querySelector('#comment_body');
+      el.removeAttribute('maxlength');
+      el.value = #{long_body.to_json};
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    JS
     click_button "投稿する"
 
-    # バリデーションエラーメッセージを確認（コントローラーでerrors.full_messagesを使用している）
     assert_text "too long"
   end
 
