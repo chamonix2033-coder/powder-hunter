@@ -30,6 +30,13 @@
   <!-- Map Container -->
   <div id="map" style="height: 500px; width: 100%; margin-bottom: 40px; border-radius: 8px; z-index: 1; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
 
+  <!-- Category Tabs -->
+  <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
+    <%= link_to 'すべて', selections_path(category: nil), style: "padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; #{params[:category].blank? ? 'background-color: #2980b9; color: white;' : 'background-color: #ecf0f1; color: #7f8c8d;'}", data: { turbo: false } %>
+    <%= link_to 'スキー場', selections_path(category: 'resort'), style: "padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; #{params[:category] == 'resort' ? 'background-color: #2980b9; color: white;' : 'background-color: #ecf0f1; color: #7f8c8d;'}", data: { turbo: false } %>
+    <%= link_to 'バックカントリー', selections_path(category: 'backcountry'), style: "padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; #{params[:category] == 'backcountry' ? 'background-color: #2980b9; color: white;' : 'background-color: #ecf0f1; color: #7f8c8d;'}", data: { turbo: false } %>
+  </div>
+
   <div class="selections-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
     <% @ski_resorts.each do |resort| %>
       <% is_selected = @selected_resort_ids.include?(resort.id) %>

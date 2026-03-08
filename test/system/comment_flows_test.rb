@@ -87,12 +87,10 @@ class CommentFlowsTest < ApplicationSystemTestCase
 
     assert_text "削除予定のコメント"
 
-    # Turbo + Chrome の組み合わせで accept_confirm が不安定なため
-    # window.confirm を常に true を返すよう上書きしてダイアログをスキップ
-    page.execute_script("window.confirm = function() { return true; }")
-
-    within("#comment-#{comment.id}") do
-      click_button "🗑️ 削除"
+    accept_confirm "\u3053\u306E\u30B3\u30E1\u30F3\u30C8\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F" do
+      within("#comment-#{comment.id}") do
+        click_button "🗑️ 削除"
+      end
     end
 
     assert_text "コメントを削除しました"

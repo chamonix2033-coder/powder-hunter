@@ -6,7 +6,7 @@ class ResortsController < ApplicationController
                  SkiResort.all.order(name_ja: :asc)
     end
 
-    if params[:category].present? && SkiResort.categories.keys.include?(params[:category])
+    if !user_signed_in? && params[:category].present? && SkiResort.categories.keys.include?(params[:category])
       @resorts = @resorts.where(category: params[:category])
     end
 

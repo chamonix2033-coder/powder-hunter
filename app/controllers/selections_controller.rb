@@ -3,6 +3,11 @@ class SelectionsController < ApplicationController
 
   def index
     @ski_resorts = SkiResort.all.order(name_ja: :asc)
+
+    if params[:category].present? && SkiResort.categories.keys.include?(params[:category])
+      @ski_resorts = @ski_resorts.where(category: params[:category])
+    end
+
     @selected_resort_ids = current_user.selections.pluck(:ski_resort_id)
     map_data = @ski_resorts.map do |resort|
       {
@@ -19,6 +24,11 @@ class SelectionsController < ApplicationController
   end
 
   def create
+    if current_user.selections.count >= 3
+      redirect_to selections_path, alert: "スキー場の登録上限（3つ）に達しました"
+      return
+    end
+
     @selection = current_user.selections.build(ski_resort_id: params[:ski_resort_id])
     if @selection.save
       redirect_to selections_path, notice: "スキー場を追加しました"

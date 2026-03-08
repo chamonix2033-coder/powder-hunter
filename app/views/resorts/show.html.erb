@@ -128,7 +128,7 @@
     .comment-form-section h3 { color: #2c3e50; margin-bottom: 15px; }
   </style>
 
-  <script type="module">
+  <script>
     document.addEventListener("turbo:load", setupCommentInteractions);
     document.addEventListener("DOMContentLoaded", setupCommentInteractions);
 
@@ -140,7 +140,7 @@
         btn.dataset.bound = true;
 
         btn.addEventListener("click", (e) => {
-          const commentId = e.target.dataset.commentId;
+          const commentId = e.currentTarget.dataset.commentId;
           const display = document.querySelector(`[data-display-for="${commentId}"]`);
           const edit = document.querySelector(`[data-edit-for="${commentId}"]`);
           if (display && edit) {
