@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   get "about_powder_index", to: "home#about_powder_index", as: :about_powder_index
   resources :selections, only: [ :index, :create, :destroy ]
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: "users/registrations"
+  }
   resources :resorts, only: [ :index, :show ] do
     resources :comments, only: [ :create, :update, :destroy ]
   end
