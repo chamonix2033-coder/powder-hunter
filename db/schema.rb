@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_24_102917) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_08_015907) do
   create_table "comments", force: :cascade do |t|
     t.string "body", null: false
     t.datetime "created_at", null: false
@@ -58,8 +58,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_102917) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "weather_caches", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.json "forecast_data"
+    t.datetime "last_fetched_at"
+    t.integer "ski_resort_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ski_resort_id"], name: "index_weather_caches_on_ski_resort_id"
+  end
+
   add_foreign_key "comments", "ski_resorts"
   add_foreign_key "comments", "users"
   add_foreign_key "selections", "ski_resorts"
   add_foreign_key "selections", "users"
+  add_foreign_key "weather_caches", "ski_resorts"
 end

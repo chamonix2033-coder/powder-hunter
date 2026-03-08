@@ -20,13 +20,13 @@ class OpenMeteoService
     forecasts_by_id = {}
     missing_resorts = []
 
-    # 1. 既存の個別キャッシュをチェック
+    # 1. 既存の個別キャッシュ(DB)をチェック
     resorts.each do |resort|
-      cache_key = "open_meteo_resort_v4_#{resort.id}"
-      cached_data = Rails.cache.read(cache_key)
+      cache = WeatherCache.find_by(ski_resort_id: resort.id)
 
-      if cached_data
-        forecasts_by_id[resort.id] = cached_data
+      # 12時間以内に取得したデータがあればキャッシュとして採用
+      if cache && cache.last_fetched_at && cache.last_fetched_at > 12.hours.ago
+        forecasts_by_id[resort.id] = cache.forecast_data
       else
         missing_resorts << resort
       end
@@ -57,12 +57,15 @@ class OpenMeteoService
         parsed = JSON.parse(response.body)
         results_array = parsed.is_a?(Array) ? parsed : [ parsed ]
 
-        # 3. 取得した結果を個別にキャッシュ保存（12時間）
+        # 3. 取得した結果をDBにキャッシュ保存 (12時間有効となるようlast_fetched_atを更新)
         missing_resorts.each_with_index do |resort, index|
           data = results_array[index]
           if data
-            cache_key = "open_meteo_resort_v4_#{resort.id}"
-            Rails.cache.write(cache_key, data, expires_in: 12.hours)
+            cache = WeatherCache.find_or_initialize_by(ski_resort_id: resort.id)
+            cache.update!(
+              forecast_data: data,
+              last_fetched_at: Time.current
+            )
             forecasts_by_id[resort.id] = data
           end
         end
