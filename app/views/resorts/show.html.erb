@@ -128,23 +128,47 @@
     .comment-form-section h3 { color: #2c3e50; margin-bottom: 15px; }
   </style>
 
-  <script>
-    function toggleEdit(commentId) {
-      const display = document.querySelector(`[data-display-for="${commentId}"]`);
-      const edit = document.querySelector(`[data-edit-for="${commentId}"]`);
-      if (display && edit) {
-        const isEditing = edit.style.display !== 'none';
-        display.style.display = isEditing ? 'block' : 'none';
-        edit.style.display = isEditing ? 'none' : 'block';
-      }
-    }
+  <script type="module">
+    document.addEventListener("turbo:load", setupCommentInteractions);
+    document.addEventListener("DOMContentLoaded", setupCommentInteractions);
 
-    function updateCounter(textarea, counterId) {
-      const counter = document.getElementById(counterId);
-      if (counter) {
-        counter.textContent = `${textarea.value.length}/256`;
-        counter.style.color = textarea.value.length > 240 ? '#e74c3c' : '#999';
-      }
+    function setupCommentInteractions() {
+      // Edit button toggle
+      document.querySelectorAll(".btn-edit, .btn-cancel").forEach((btn) => {
+        // Prevent multiple bindings
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = true;
+
+        btn.addEventListener("click", (e) => {
+          const commentId = e.target.dataset.commentId;
+          const display = document.querySelector(`[data-display-for="${commentId}"]`);
+          const edit = document.querySelector(`[data-edit-for="${commentId}"]`);
+          if (display && edit) {
+            const isEditing = edit.style.display !== 'none';
+            display.style.display = isEditing ? 'block' : 'none';
+            edit.style.display = isEditing ? 'none' : 'block';
+          }
+        });
+      });
+
+      // Textarea char counter
+      document.querySelectorAll(".comment-input[maxlength]").forEach((textarea) => {
+        if (textarea.dataset.bound) return;
+        textarea.dataset.bound = true;
+
+        const updateCounter = () => {
+          const counterId = textarea.dataset.counterId;
+          const counter = document.getElementById(counterId);
+          if (counter) {
+            counter.textContent = `${textarea.value.length}/256`;
+            counter.style.color = textarea.value.length > 240 ? '#e74c3c' : '#999';
+          }
+        };
+        
+        textarea.addEventListener("input", updateCounter);
+        // initialize
+        updateCounter();
+      });
     }
   </script>
 <% end %>
@@ -227,7 +251,7 @@
 
           <% if user_signed_in? && current_user.id == comment.user_id %>
             <div class="comment-actions">
-              <button type="button" class="btn-edit" onclick="toggleEdit(<%= comment.id %>)">✏️ 編集</button>
+              <button type="button" class="btn-edit" data-comment-id="<%= comment.id %>">✏️ 編集</button>
               <%= button_to "🗑️ 削除", resort_comment_path(@resort, comment), method: :delete,
                   data: { turbo_confirm: "このコメントを削除しますか？" },
                   class: "btn-delete",
@@ -239,11 +263,11 @@
         <!-- 編集モード（初期非表示） -->
         <% if user_signed_in? && current_user.id == comment.user_id %>
           <div class="comment-edit" data-edit-for="<%= comment.id %>" style="display: none;">
-            <%= form_with(model: comment, url: resort_comment_path(@resort, comment), method: :patch, data: { turbo: false }, local: true) do |f| %>
+            <%= form_with(model: comment, url: resort_comment_path(@resort, comment), method: :patch) do |f| %>
               <div style="margin-bottom: 10px;">
                 <%= f.text_area :body, id: "comment_body_edit_#{comment.id}", rows: 3, maxlength: 256, class: "comment-input",
                     style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; resize: vertical; font-family: inherit;",
-                    oninput: "updateCounter(this, 'edit-counter-#{comment.id}')" %>
+                    data: { counter_id: "edit-counter-#{comment.id}" } %>
                 <small id="edit-counter-<%= comment.id %>" style="color: #999;"><%= comment.body.length %>/256</small>
               </div>
               <div style="margin-bottom: 10px;">
@@ -252,7 +276,7 @@
               </div>
               <div>
                 <%= f.submit "更新", class: "btn-submit btn-update-comment" %>
-                <button type="button" class="btn-cancel" onclick="toggleEdit(<%= comment.id %>)">キャンセル</button>
+                <button type="button" class="btn-cancel" data-comment-id="<%= comment.id %>">キャンセル</button>
               </div>
             <% end %>
           </div>
@@ -267,12 +291,12 @@
   <% if user_signed_in? %>
     <div class="comment-form-section" id="comment-form">
       <h3>コメントを投稿する</h3>
-      <%= form_with(model: Comment.new, url: resort_comments_path(@resort), method: :post, data: { turbo: false }, local: true) do |f| %>
+      <%= form_with(model: Comment.new, url: resort_comments_path(@resort), method: :post) do |f| %>
         <div style="margin-bottom: 10px;">
           <%= f.text_area :body, rows: 3, maxlength: 256, placeholder: "コメントを入力してください（最大256文字）",
               class: "comment-input",
               style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; resize: vertical; font-family: inherit;",
-              oninput: "updateCounter(this, 'new-counter')" %>
+              data: { counter_id: "new-counter" } %>
           <small id="new-counter" style="color: #999;">0/256</small>
         </div>
         <div style="margin-bottom: 10px;">
