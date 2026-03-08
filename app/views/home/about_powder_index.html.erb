@@ -1,0 +1,118 @@
+<% content_for :title, "パウダー指数とは？ - Powder Hunter" %>
+
+<% content_for :head do %>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.2em;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      line-height: 1.8;
+    }
+    h2 {
+      color: #2980b9;
+      border-bottom: 2px solid #ecf0f1;
+      padding-bottom: 10px;
+      margin-top: 30px;
+    }
+    .highlight-box {
+      background-color: #e8f8f5;
+      border-left: 5px solid #27ae60;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .formula {
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border: 1px dashed #ccc;
+      border-radius: 8px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #34495e;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .back-link:hover {
+      background-color: #2c3e50;
+    }
+
+    /* ===== Mobile Responsive ===== */
+    @media (max-width: 768px) {
+      .container { width: 90%; padding: 20px; }
+      h1 { font-size: 1.8em; }
+      .formula { font-size: 1.1em; }
+    }
+  </style>
+<% end %>
+
+<header>
+  <h1>ℹ️ パウダー指数とは？</h1>
+</header>
+
+<div class="container">
+  <p>
+    <strong>Powder Hunter</strong> では、スキーやスノーボードで最高のパウダースノーを楽しめる日を探すために、オリジナルの<strong>「パウダー指数 (Powder Index)」</strong>を計算して表示しています。
+  </p>
+
+  <div class="highlight-box">
+    <strong>💡 パウダー指数（0〜100）が高いほど、サラサラの良質な新雪（パウダー）が深く積もっている可能性が高いことを示します！</strong>
+  </div>
+
+  <h2>📊 計算方法（目安）</h2>
+  <p>パウダー指数は「24時間以内の降雪量」をベースに、「気温による雪質の悪化（ペナルティ）」を差し引いて独自の指標として算出されます。計算式は以下の通りです。</p>
+
+  <div class="formula">
+    基本指数 ＝ (降雪量 cm) － (最高気温が0℃を超える場合のペナルティ)<br>
+    <span style="color: #2980b9; font-size: 0.9em;">パウダー指数 ＝ 基本指数 × 2 （最大100まで）</span>
+  </div>
+
+  <h2>🌡️ なぜ気温を見るの？</h2>
+  <p>
+    雪がたくさん降っても、日中の気温が0℃（プラス）を超えてしまうと、雪が溶けて水分を含んだ「重い雪」になったり、夜に冷えて「アイスバーン（ガリガリ）」になったりします。
+  </p>
+  <p>
+    そのため、<strong>「たくさん雪が降り、かつ気温がずっと低い（マイナスである）こと」</strong>が、最高のパウダーの条件となります。当サイトでは、最高気温が0℃を上回る予報の日には厳しめの減点（ペナルティ）を課すことで、本当に良い雪の日だけを厳選しています。
+  </p>
+
+  <h2>❄️ 指数の目安</h2>
+  <ul style="list-style-type: none; padding-left: 0;">
+    <li style="margin-bottom: 10px;"><strong style="font-size: 1.2em; color: #27ae60;">🏔️ 51 〜 100 : THE DAY (パウダー確定！)</strong><br> 十分な降雪があり、気温も低いため、極上のパウダースノーが期待できます。</li>
+    <li style="margin-bottom: 10px;"><strong style="font-size: 1.2em; color: #3498db;">❄️ 1 〜 50 : 降雪あり</strong><br> 雪は降りますが、積雪量が少なかったり、少し気温が高かったりする日です。</li>
+    <li style="margin-bottom: 10px;"><strong style="font-size: 1.2em; color: #7f8c8d;">⛄️ 0 : 期待薄</strong><br> 降雪がない、または気温が高すぎて雪が溶けてしまう予報です。</li>
+  </ul>
+
+  <div style="text-align: center; margin-top: 40px;">
+    <!-- JavaScriptのhistory.back()を使ってブラウザバック -->
+    <a href="javascript:history.back()" class="back-link">← 前のページに戻る</a>
+  </div>
+</div>

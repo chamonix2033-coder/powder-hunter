@@ -6,4 +6,7 @@ class HomeController < ApplicationController
     end
     # Non-logged-in users see the landing page (no API calls)
   end
+
+  def about_powder_index
+  end
 end

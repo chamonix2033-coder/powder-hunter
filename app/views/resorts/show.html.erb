@@ -181,7 +181,10 @@
 <div class="container">
   <%= link_to "← 戻る (Back to Resorts)", resorts_path, class: "back-link" %>
   
-  <h2>14-Day Powder Forecast</h2>
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 5px; margin-bottom: 15px;">
+    <h2 style="margin: 0; border: none; padding: 0;">14-Day Powder Forecast</h2>
+    <%= link_to 'ℹ️ パウダー指数とは？', about_powder_index_path, style: "color: #3498db; text-decoration: underline; font-weight: bold; font-size: 0.9em;" %>
+  </div>
 
   <% if @api_stale %>
     <div style="padding: 12px 20px; margin: 10px 0;
