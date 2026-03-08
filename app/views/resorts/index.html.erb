@@ -164,6 +164,7 @@
 
     <% if user_signed_in? %>
       <%= link_to '表示するスキー場を編集する', selections_path, style: "color: #f39c12; font-weight: bold; margin-right: 15px; text-decoration: underline;", data: { turbo: false } %>
+      <%= link_to 'アカウント設定', edit_user_registration_path, style: "color: #bdc3c7; font-weight: bold; margin-right: 15px; text-decoration: underline;" %>
       <%= current_user.email %> さん | 
       <%= button_to 'ログアウト', destroy_user_session_path, method: :delete, data: { turbo: false }, form: { style: "display: inline-block; margin: 0;", data: { turbo: false } }, style: "background: none; border: none; padding: 0; color: #ecf0f1; text-decoration: underline; cursor: pointer; font-family: inherit; font-size: inherit;" %>
     <% else %>

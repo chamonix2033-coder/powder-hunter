@@ -90,7 +90,7 @@ namespace :powder do
     # Process Grouped Emails
     if notify_resorts_data.any?
       puts "Processing email deliveries for users..."
-      User.find_each do |user|
+      User.where(email_notifications: true).find_each do |user|
         user_resort_ids = user.ski_resorts.pluck(:id)
         matching_data = notify_resorts_data.select do |data|
           user_resort_ids.include?(data[:resort].id)
