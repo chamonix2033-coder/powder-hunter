@@ -117,7 +117,7 @@ class CommentFlowsTest < ApplicationSystemTestCase
       })();
     JS
 
-    assert_text "too long"
+    assert_text "256文字以下で入力してください"
   end
 
   private

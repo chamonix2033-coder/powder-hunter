@@ -1,49 +1,168 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<% content_for :title, "アカウント設定 - Powder Hunter" %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
-  </div>
-
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-  <% end %>
-
-  <div class="field" style="margin: 20px 0; padding: 15px; background-color: #f9f9f9; border-radius: 5px; border-left: 4px solid #3498db;">
-    <label style="display: flex; align-items: center; cursor: pointer;">
-      <%= f.check_box :email_notifications, style: "width: 20px; height: 20px; margin-right: 10px;" %>
-      <strong>毎日パウダーアラート（メール通知）を受け取る</strong>
-    </label>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i></p>
-    <p><%= f.password_field :password, autocomplete: "new-password" %></p>
-    <% if @minimum_password_length %>
-      <p><em><%= @minimum_password_length %> characters minimum</em></p>
-    <% end %>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :password_confirmation %></p>
-    <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i></p>
-    <p><%= f.password_field :current_password, autocomplete: "current-password" %></p>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
+<% content_for :head do %>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 2em; }
+    .account-container {
+      width: 80%;
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 30px 30px 30px 30px;
+    }
+    .account-container h2 {
+      font-size: 1.5em;
+      color: #2c3e50;
+      border-bottom: 2px solid #ecf0f1;
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+    .account-container h3 {
+      font-size: 1.1em;
+      color: #e74c3c;
+      margin-top: 35px;
+    }
+    .field { margin-bottom: 18px; }
+    .field label, .field p { margin: 0 0 5px 0; font-weight: bold; color: #555; }
+    .field input[type="email"],
+    .field input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    .field input[type="email"]:focus,
+    .field input[type="password"]:focus {
+      border-color: #2980b9;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(41,128,185,0.15);
+    }
+    .field i { font-size: 0.85em; color: #999; font-weight: normal; }
+    .notification-field {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f0f8ff;
+      border-radius: 5px;
+      border-left: 4px solid #3498db;
+    }
+    .notification-field label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .notification-field input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .actions { margin-top: 20px; }
+    .actions input[type="submit"] {
+      padding: 10px 25px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .actions input[type="submit"]:hover { background-color: #2ecc71; }
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 8px 18px;
+      background-color: #34495e;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .back-link:hover { background-color: #2c3e50; }
+    .cancel-section {
+      border-top: 1px solid #ecf0f1;
+      margin-top: 30px;
+      padding-top: 20px;
+    }
+    @media (max-width: 768px) {
+      .account-container { width: 92%; padding: 20px; }
+    }
+  </style>
 <% end %>
 
-<h3>Cancel my account</h3>
+<header>
+  <h1>⚙️ アカウント設定</h1>
+</header>
 
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+<div class="account-container">
+  <h2>プロフィールの編集</h2>
 
-<%= link_to "Back", :back %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="field">
+      <p><%= f.label :email, "メールアドレス" %></p>
+      <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
+    </div>
+
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div>確認待ちメールアドレス: <%= resource.unconfirmed_email %></div>
+    <% end %>
+
+    <div class="notification-field">
+      <label>
+        <%= f.check_box :email_notifications %>
+        <strong>毎日パウダーアラート（メール通知）を受け取る</strong>
+      </label>
+    </div>
+
+    <div class="field">
+      <p><%= f.label :password, "新しいパスワード" %> <i>（変更しない場合は空欄のままにしてください）</i></p>
+      <p><%= f.password_field :password, autocomplete: "new-password" %></p>
+      <% if @minimum_password_length %>
+        <p><em><%= @minimum_password_length %>文字以上</em></p>
+      <% end %>
+    </div>
+
+    <div class="field">
+      <p><%= f.label :password_confirmation, "新しいパスワード（確認）" %></p>
+      <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
+    </div>
+
+    <div class="field">
+      <p><%= f.label :current_password, "現在のパスワード" %> <i>（変更の確認のために必要です）</i></p>
+      <p><%= f.password_field :current_password, autocomplete: "current-password" %></p>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "更新する" %>
+    </div>
+  <% end %>
+
+  <%= link_to "← スキー場一覧へ戻る", resorts_path, class: "back-link" %>
+
+  <div class="cancel-section">
+    <h3>アカウントの削除</h3>
+    <div><%= button_to "アカウントを削除する", registration_path(resource_name), data: { turbo_confirm: "本当に削除しますか？この操作は取り消せません。" }, method: :delete, style: "padding: 8px 15px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-family: inherit;" %></div>
+  </div>
+</div>
