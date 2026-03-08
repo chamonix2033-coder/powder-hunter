@@ -1,9 +1,13 @@
 class ResortsController < ApplicationController
   def index
-    if user_signed_in?
-      @resorts = current_user.ski_resorts.order(name_ja: :asc)
+    @resorts = if user_signed_in?
+                 current_user.ski_resorts.order(name_ja: :asc)
     else
-      @resorts = SkiResort.all.order(name_ja: :asc)
+                 SkiResort.all.order(name_ja: :asc)
+    end
+
+    if params[:category].present? && SkiResort.categories.keys.include?(params[:category])
+      @resorts = @resorts.where(category: params[:category])
     end
 
     result = OpenMeteoService.fetch_all_forecasts(@resorts)

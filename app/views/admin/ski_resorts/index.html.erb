@@ -16,6 +16,7 @@
       <thead>
         <tr style="background-color: #ecf0f1; border-bottom: 2px solid #bdc3c7;">
           <th style="padding: 12px; text-align: left;">日本語名</th>
+          <th style="padding: 12px; text-align: left;">カテゴリー</th>
           <th style="padding: 12px; text-align: left;">英語名</th>
           <th style="padding: 12px; text-align: center;">Current Index</th>
           <th style="padding: 12px; text-align: center;">Last Index</th>
@@ -31,6 +32,7 @@
           <% last_idx = resort.last_powder_index || 0 %>
           <tr style="border-bottom: 1px solid #ecf0f1;">
             <td style="padding: 12px; font-weight: bold;"><%= resort.name_ja %></td>
+            <td style="padding: 12px; color: #8e44ad; font-weight: bold;"><%= resort.category == 'resort' ? 'スキー場' : 'バックカントリー' %></td>
             <td style="padding: 12px; color: #7f8c8d;"><%= resort.name_en %></td>
             <td style="padding: 12px; text-align: center;">
               <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-weight: bold; color: white; background-color: <%= current_idx > 50 ? '#27ae60' : (current_idx > 0 ? '#3498db' : '#bdc3c7') %>;">

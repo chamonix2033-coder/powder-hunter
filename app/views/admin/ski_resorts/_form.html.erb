@@ -11,6 +11,11 @@
   <% end %>
 
   <div style="margin-bottom: 15px;">
+    <%= form.label :category, "カテゴリー (区分)", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.select :category, SkiResort.categories.keys.map { |k| [k.capitalize, k] }, {}, style: "width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; background-color: white;" %>
+  </div>
+
+  <div style="margin-bottom: 15px;">
     <%= form.label :name_en, "スキー場名 (英語)", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
     <%= form.text_field :name_en, style: "width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;" %>
   </div>

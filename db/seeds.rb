@@ -22,6 +22,31 @@ resorts.each do |r_attrs|
     resort.longitude = r_attrs[:longitude]
     resort.elevation_base = r_attrs[:elevation_base]
     resort.elevation_top = r_attrs[:elevation_top]
+    resort.category = :resort
+  end
+end
+
+backcountry_routes = [
+  { name_ja: '神楽ヶ峰', name_en: 'Kaguragamine', latitude: 36.8402, longitude: 138.7513, elevation_base: 1850, elevation_top: 2028 },
+  { name_ja: '黒姫山', name_en: 'Kurohimeyama', latitude: 36.8144, longitude: 138.1341, elevation_base: 1190, elevation_top: 2053 },
+  { name_ja: '三ノ沢岳', name_en: 'Sannosawadake', latitude: 35.7533, longitude: 137.8011, elevation_base: 2612, elevation_top: 2846 },
+  { name_ja: '剱御前山', name_en: 'Tsurugigozenyama', latitude: 36.5961, longitude: 137.6163, elevation_base: 2450, elevation_top: 2777 },
+  { name_ja: '鳥海山', name_en: 'Chokaisan', latitude: 39.0986, longitude: 140.0494, elevation_base: 1200, elevation_top: 2236 },
+  { name_ja: '白馬乗鞍岳', name_en: 'Hakuba Norikuradake', latitude: 36.7825, longitude: 137.7944, elevation_base: 1900, elevation_top: 2436 },
+  { name_ja: '神奈山', name_en: 'Kannayama', latitude: 36.8900, longitude: 138.1258, elevation_base: 1450, elevation_top: 1909 },
+  { name_ja: '前山', name_en: 'Maeyama', latitude: 36.8838, longitude: 138.1405, elevation_base: 1500, elevation_top: 1932 },
+  { name_ja: '三田原山', name_en: 'Mitaharayama', latitude: 36.8872, longitude: 138.1158, elevation_base: 1855, elevation_top: 2341 },
+  { name_ja: '利尻山', name_en: 'Rishirizan', latitude: 45.1802, longitude: 141.2413, elevation_base: 220, elevation_top: 1721 }
+]
+
+backcountry_routes.each do |bc_attrs|
+  SkiResort.find_or_create_by!(name_ja: bc_attrs[:name_ja]) do |bc|
+    bc.name_en = bc_attrs[:name_en]
+    bc.latitude = bc_attrs[:latitude]
+    bc.longitude = bc_attrs[:longitude]
+    bc.elevation_base = bc_attrs[:elevation_base]
+    bc.elevation_top = bc_attrs[:elevation_top]
+    bc.category = :backcountry
   end
 end
 

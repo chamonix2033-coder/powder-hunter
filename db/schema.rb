@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_08_015907) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_08_022114) do
   create_table "comments", force: :cascade do |t|
     t.string "body", null: false
     t.datetime "created_at", null: false
@@ -33,6 +33,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_08_015907) do
 
   create_table "ski_resorts", force: :cascade do |t|
     t.integer "cached_powder_index"
+    t.integer "category", default: 0
     t.datetime "created_at", null: false
     t.float "elevation_base"
     t.float "elevation_top"
