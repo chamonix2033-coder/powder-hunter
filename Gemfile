@@ -59,13 +59,9 @@ group :development do
   gem "web-console"
 end
 
-group :development, :test do
-  gem "sqlite3", ">= 2.1"
-end
+gem "sqlite3", ">= 2.1"
 
-group :production do
-  gem "pg"
-end
+gem "pg"
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]

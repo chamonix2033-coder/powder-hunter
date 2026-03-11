@@ -1,0 +1,15 @@
+name: Daily Powder Check
+
+on:
+  schedule:
+    # 毎日午前8時(JST) = 毎日午後11時(UTC)
+    - cron: '0 23 * * *'
+  workflow_dispatch: # 手動実行用ボタンを追加
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Powder Check Task
+        run: |
+          curl -f "https://powder-hunter-sqlite.fly.dev/tasks/powder_check?token=${{ secrets.CRON_TOKEN }}"

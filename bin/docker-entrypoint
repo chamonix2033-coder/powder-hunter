@@ -1,8 +1,18 @@
 #!/bin/bash -e
 
+# Support for Rails 8 Thruster port configuration
+export HTTP_PORT=8080
+echo "Starting entrypoint. HTTP_PORT is set to: $HTTP_PORT"
+
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+  # Ensure the SQLite database file is writable if it exists
+  if [ -f "/data/production.sqlite3" ]; then
+    echo "Checking database permissions..."
+    chmod 664 /data/production.sqlite3 || true
+  fi
   ./bin/rails db:prepare
 fi
 
+echo "Executing command: $@"
 exec "${@}"

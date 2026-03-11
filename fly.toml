@@ -1,0 +1,23 @@
+app = "powder-hunter-sqlite"
+primary_region = "nrt"
+
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[mounts]]
+  source = "powder_hunter_data"
+  destination = "/data"
+
+[env]
+  DB_PATH = "/data/production.sqlite3"
+  PORT = "8080"
+  RAILS_ENV = "production"
+  RAILS_LOG_TO_STDOUT = "true"
+  RAILS_SERVE_STATIC_FILES = "true"

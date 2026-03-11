@@ -22,9 +22,7 @@ test:
 
 # Store production database in the storage/ directory, which by default
 # is mounted as a persistent Docker volume in config/deploy.yml.
+# For Fly.io, we will mount the volume at /data
 production:
-  primary:
-    <<: *default
-    adapter: postgresql
-    encoding: unicode
-    url: <%= ENV["DATABASE_URL"] %>
+  <<: *default
+  database: <%= ENV.fetch("DB_PATH") { "/data/production.sqlite3" } %>
