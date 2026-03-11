@@ -12,4 +12,7 @@ jobs:
     steps:
       - name: Trigger Powder Check Task
         run: |
-          curl -f "https://powder-hunter-sqlite.fly.dev/tasks/powder_check?token=${{ secrets.CRON_TOKEN }}"
+          # --retry 10: 最大10回リトライ
+          # --retry-delay 5: 5秒おきにリトライ
+          # --retry-all-errors: 502などのサーバーエラー時もリトライ
+          curl -f --retry 10 --retry-delay 5 --retry-all-errors "https://powder-hunter-sqlite.fly.dev/tasks/powder_check?token=${{ secrets.CRON_TOKEN }}"
