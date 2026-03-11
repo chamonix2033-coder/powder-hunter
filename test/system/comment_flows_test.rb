@@ -14,7 +14,7 @@ class CommentFlowsTest < ApplicationSystemTestCase
   # ---------------------------------------------------------
   test "visitor can see comments but not post form" do
     # 事前にコメントを作成
-    comment = Comment.create!(user: @user, ski_resort: @resort1, body: "素晴らしいパウダーでした！", url: "https://example.com/report")
+    Comment.create!(user: @user, ski_resort: @resort1, body: "素晴らしいパウダーでした！", url: "https://example.com/report")
 
     visit resort_url(@resort1)
 
@@ -59,7 +59,7 @@ class CommentFlowsTest < ApplicationSystemTestCase
 
     # 編集ボタンをクリック
     within("#comment-#{comment.id}") do
-      click_button "✏️ 編集"
+      find(".btn-edit").click
     end
 
     # 編集フォーム内で入力（表示されるまで待つ）
