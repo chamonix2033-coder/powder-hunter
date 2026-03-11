@@ -38,7 +38,7 @@ namespace :db do
     sqlite_db = SQLite3::Database.new(sqlite_path)
     sqlite_db.execute("PRAGMA foreign_keys = OFF")
 
-    tables = ActiveRecord::Base.connection.tables - ["schema_migrations", "ar_internal_metadata"]
+    tables = ActiveRecord::Base.connection.tables - [ "schema_migrations", "ar_internal_metadata" ]
 
     tables.each do |table|
       print "Copying table: #{table}..."
@@ -50,7 +50,7 @@ namespace :db do
       end
 
       columns = rows.first.keys
-      placeholders = (["?"] * columns.size).join(", ")
+      placeholders = ([ "?" ] * columns.size).join(", ")
       insert_sql = "INSERT INTO #{table} (#{columns.join(', ')}) VALUES (#{placeholders})"
 
       sqlite_db.transaction do
@@ -85,7 +85,7 @@ namespace :db do
     # Summary
     puts "\n--- Summary ---"
     sqlite_db_check = SQLite3::Database.new(sqlite_path)
-    ["users", "comments", "ski_resorts"].each do |t|
+    [ "users", "comments", "ski_resorts" ].each do |t|
       count = sqlite_db_check.get_first_value("SELECT count(*) FROM #{t}") rescue "N/A"
       puts "#{t}: #{count} rows"
     end

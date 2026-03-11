@@ -3,7 +3,7 @@ namespace :powder do
   task check: :environment do
     puts "Starting daily powder check at #{Time.current}..."
 
-    notify_resorts_data = [ ]
+    notify_resorts_data = []
 
     all_resorts = SkiResort.all
     result = OpenMeteoService.fetch_all_forecasts(all_resorts)
