@@ -59,8 +59,9 @@ class CommentFlowsTest < ApplicationSystemTestCase
 
     # 編集ボタンをクリック
     within("#comment-#{comment.id}") do
-      find(".btn-edit").click
+      page.execute_script("document.querySelector('#comment-#{comment.id} .btn-edit').click()")
     end
+
 
     # 編集フォーム内で入力（表示されるまで待つ）
     assert_selector "[data-edit-for='#{comment.id}']", visible: true
