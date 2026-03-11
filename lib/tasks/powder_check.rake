@@ -6,7 +6,8 @@ namespace :powder do
     notify_resorts_data = []
 
     all_resorts = SkiResort.all
-    forecasts = OpenMeteoService.fetch_all_forecasts(all_resorts) || {}
+    result = OpenMeteoService.fetch_all_forecasts(all_resorts)
+    forecasts = result[:forecasts] || {}
 
     all_resorts.each do |resort|
       forecast = forecasts[resort.id]

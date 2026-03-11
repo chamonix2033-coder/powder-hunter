@@ -3,7 +3,7 @@ class TasksController < ApplicationController
 
   def powder_check
     auth_token = ENV["CRON_TOKEN"]
-    
+
     if auth_token.blank? || params[:token] != auth_token
       render json: { error: "Unauthorized" }, status: :unauthorized
       return
@@ -12,7 +12,7 @@ class TasksController < ApplicationController
     # Run the rake task in a separate thread/process to respond quickly
     # but since it's a cron job, a simple system call or Rake task invocation is fine.
     Rails.logger.info "Starting daily powder check via HTTP endpoint..."
-    
+
     begin
       Rails.application.load_tasks
       Rake::Task["powder:check"].invoke
