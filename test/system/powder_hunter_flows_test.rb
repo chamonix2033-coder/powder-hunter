@@ -37,7 +37,7 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
     click_button "Sign up"
 
     # After signup, user is logged in and redirected to resorts page
-    assert_text "Powder Hunter"
+    assert_selector "h1", text: /Powder Hunter/i
     assert_text "new_user@example.com"
     assert_text "ログアウト"
 
@@ -50,7 +50,7 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
     fill_in "user[password]", with: "password123"
     click_button "Log in"
 
-    assert_text "Powder Hunter"
+    assert_selector "h1", text: /Powder Hunter/i
     assert_text @user.email
   end
 
@@ -120,7 +120,7 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
 
     # Back to resorts list
     visit resorts_url
-    assert_text "Powder Hunter"
+    assert_selector "h1", text: /Powder Hunter/i
   end
 
   private
@@ -131,7 +131,7 @@ class PowderHunterFlowsTest < ApplicationSystemTestCase
     fill_in "user[email]", with: user.email
     fill_in "user[password]", with: "password123"
     click_button "Log in"
-    assert_text "Powder Hunter"
+    assert_selector "h1", text: /Powder Hunter/i
   end
 
   # Stub the Open-Meteo batch API with realistic forecast data
