@@ -11,6 +11,10 @@ primary_region = "nrt"
   min_machines_running = 1
   processes = ["app"]
 
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+
 [[mounts]]
   source = "powder_hunter_data"
   destination = "/data"
